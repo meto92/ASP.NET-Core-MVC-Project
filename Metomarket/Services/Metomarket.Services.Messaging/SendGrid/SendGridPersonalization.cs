@@ -1,9 +1,9 @@
-﻿namespace Metomarket.Services.Messaging.SendGrid
+﻿using System.Collections.Generic;
+
+using Newtonsoft.Json;
+
+namespace Metomarket.Services.Messaging.SendGrid
 {
-    using System.Collections.Generic;
-
-    using Newtonsoft.Json;
-
     public class SendGridPersonalization
     {
         [JsonProperty("to")]

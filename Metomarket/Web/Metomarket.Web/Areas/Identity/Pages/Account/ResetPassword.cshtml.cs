@@ -1,15 +1,15 @@
-﻿namespace Metomarket.Web.Areas.Identity.Pages.Account
+﻿using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+
+using Metomarket.Data.Models;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Metomarket.Web.Areas.Identity.Pages.Account
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data.Models;
-
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
     public class ResetPasswordModel : PageModel

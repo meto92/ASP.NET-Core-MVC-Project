@@ -1,17 +1,17 @@
-﻿namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+
+using Metomarket.Data.Models;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Text.Encodings.Web;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
-
 #pragma warning disable SA1649 // File name should match first type name
     public class IndexModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name

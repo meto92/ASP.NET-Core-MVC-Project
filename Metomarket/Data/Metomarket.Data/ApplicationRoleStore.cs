@@ -1,12 +1,12 @@
-﻿namespace Metomarket.Data
+﻿using System.Security.Claims;
+
+using Metomarket.Data.Models;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+namespace Metomarket.Data
 {
-    using System.Security.Claims;
-
-    using Metomarket.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
     public class ApplicationRoleStore : RoleStore<
         ApplicationRole,
         ApplicationDbContext,

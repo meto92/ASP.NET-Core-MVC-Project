@@ -1,8 +1,8 @@
-﻿namespace Metomarket.Web
-{
-    using Microsoft.AspNetCore;
-    using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 
+namespace Metomarket.Web
+{
     public static class Program
     {
         public static void Main(string[] args)

@@ -1,13 +1,12 @@
-﻿// ReSharper disable VirtualMemberCallInConstructor
+﻿using System;
+using System.Collections.Generic;
+
+using Metomarket.Data.Common.Models;
+
+using Microsoft.AspNetCore.Identity;
+
 namespace Metomarket.Data.Models
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Metomarket.Data.Common.Models;
-
-    using Microsoft.AspNetCore.Identity;
-
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
         public ApplicationUser()

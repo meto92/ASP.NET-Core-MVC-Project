@@ -1,30 +1,30 @@
-﻿namespace Metomarket.Web
+﻿using System.Reflection;
+
+using Metomarket.Data;
+using Metomarket.Data.Common;
+using Metomarket.Data.Common.Repositories;
+using Metomarket.Data.Models;
+using Metomarket.Data.Repositories;
+using Metomarket.Data.Seeding;
+using Metomarket.Services.Data;
+using Metomarket.Services.Mapping;
+using Metomarket.Services.Messaging;
+using Metomarket.Web.ViewModels;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Metomarket.Web
 {
-    using System.Reflection;
-
-    using Metomarket.Data;
-    using Metomarket.Data.Common;
-    using Metomarket.Data.Common.Repositories;
-    using Metomarket.Data.Models;
-    using Metomarket.Data.Repositories;
-    using Metomarket.Data.Seeding;
-    using Metomarket.Services.Data;
-    using Metomarket.Services.Mapping;
-    using Metomarket.Services.Messaging;
-    using Metomarket.Web.ViewModels;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
     public class Startup
     {
         private readonly IConfiguration configuration;

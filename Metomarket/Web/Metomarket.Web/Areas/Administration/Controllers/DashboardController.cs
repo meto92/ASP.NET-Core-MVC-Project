@@ -1,10 +1,10 @@
-﻿namespace Metomarket.Web.Areas.Administration.Controllers
+﻿using Metomarket.Services.Data;
+using Metomarket.Web.Areas.Administration.ViewModels.Dashboard;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Metomarket.Web.Areas.Administration.Controllers
 {
-    using Metomarket.Services.Data;
-    using Metomarket.Web.Areas.Administration.ViewModels.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
-
     public class DashboardController : AdministrationController
     {
         private readonly ISettingsService settingsService;

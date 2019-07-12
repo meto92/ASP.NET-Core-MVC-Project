@@ -1,10 +1,10 @@
-﻿namespace Metomarket.Data.Common.Repositories
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+using Metomarket.Data.Common.Models;
+
+namespace Metomarket.Data.Common.Repositories
 {
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data.Common.Models;
-
     public interface IDeletableEntityRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {

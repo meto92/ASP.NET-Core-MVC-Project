@@ -1,10 +1,10 @@
-﻿namespace Metomarket.Web.ViewModels.Settings
+﻿using AutoMapper;
+
+using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
+
+namespace Metomarket.Web.ViewModels.Settings
 {
-    using AutoMapper;
-
-    using Metomarket.Data.Models;
-    using Metomarket.Services.Mapping;
-
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {
         public int Id { get; set; }

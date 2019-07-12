@@ -1,14 +1,14 @@
-﻿namespace Metomarket.Data.Repositories
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Metomarket.Data.Common.Models;
+using Metomarket.Data.Common.Repositories;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace Metomarket.Data.Repositories
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data.Common.Models;
-    using Metomarket.Data.Common.Repositories;
-
-    using Microsoft.EntityFrameworkCore;
-
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {

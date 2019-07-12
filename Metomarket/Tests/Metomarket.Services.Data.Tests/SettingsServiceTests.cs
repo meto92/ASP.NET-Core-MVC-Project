@@ -1,20 +1,20 @@
-﻿namespace Metomarket.Services.Data.Tests
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Metomarket.Data;
+using Metomarket.Data.Common.Repositories;
+using Metomarket.Data.Models;
+using Metomarket.Data.Repositories;
+
+using Microsoft.EntityFrameworkCore;
+
+using Moq;
+
+using Xunit;
+
+namespace Metomarket.Services.Data.Tests
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data;
-    using Metomarket.Data.Common.Repositories;
-    using Metomarket.Data.Models;
-    using Metomarket.Data.Repositories;
-
-    using Microsoft.EntityFrameworkCore;
-
-    using Moq;
-
-    using Xunit;
-
     public class SettingsServiceTests
     {
         [Fact]

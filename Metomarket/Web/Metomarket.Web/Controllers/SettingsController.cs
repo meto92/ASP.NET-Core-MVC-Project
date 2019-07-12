@@ -1,16 +1,16 @@
-﻿namespace Metomarket.Web.Controllers
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Metomarket.Data.Common.Repositories;
+using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
+using Metomarket.Web.ViewModels.Settings;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace Metomarket.Web.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data.Common.Repositories;
-    using Metomarket.Data.Models;
-    using Metomarket.Services.Mapping;
-    using Metomarket.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
-
     public class SettingsController : BaseController
     {
         private readonly IDeletableEntityRepository<Setting> repository;

@@ -1,12 +1,12 @@
-﻿namespace Metomarket.Data
+﻿using System;
+using System.Threading.Tasks;
+
+using Metomarket.Data.Common;
+
+using Microsoft.EntityFrameworkCore;
+
+namespace Metomarket.Data
 {
-    using System;
-    using System.Threading.Tasks;
-
-    using Metomarket.Data.Common;
-
-    using Microsoft.EntityFrameworkCore;
-
     public class DbQueryRunner : IDbQueryRunner
     {
         public DbQueryRunner(ApplicationDbContext context)

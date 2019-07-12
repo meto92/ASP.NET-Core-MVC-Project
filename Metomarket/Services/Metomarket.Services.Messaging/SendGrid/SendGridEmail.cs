@@ -1,7 +1,7 @@
-﻿namespace Metomarket.Services.Messaging.SendGrid
-{
-    using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
+namespace Metomarket.Services.Messaging.SendGrid
+{
     public class SendGridEmail
     {
         public SendGridEmail()

@@ -1,10 +1,10 @@
-﻿namespace Metomarket.Services.Data
+﻿using System.Linq;
+
+using Metomarket.Data.Common.Repositories;
+using Metomarket.Data.Models;
+
+namespace Metomarket.Services.Data
 {
-    using System.Linq;
-
-    using Metomarket.Data.Common.Repositories;
-    using Metomarket.Data.Models;
-
     public class SettingsService : ISettingsService
     {
         private readonly IDeletableEntityRepository<Setting> settingsRepository;

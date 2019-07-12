@@ -1,7 +1,7 @@
-﻿namespace Metomarket.Web.Controllers
-{
-    using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
+namespace Metomarket.Web.Controllers
+{
     public class BaseController : Controller
     {
     }

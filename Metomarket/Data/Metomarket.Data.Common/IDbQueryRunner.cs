@@ -1,8 +1,8 @@
-﻿namespace Metomarket.Data.Common
-{
-    using System;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
+namespace Metomarket.Data.Common
+{
     public interface IDbQueryRunner : IDisposable
     {
         Task RunQueryAsync(string query, params object[] parameters);

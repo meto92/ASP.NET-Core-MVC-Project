@@ -1,27 +1,27 @@
-﻿namespace Sandbox
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+
+using CommandLine;
+
+using Metomarket.Data;
+using Metomarket.Data.Common;
+using Metomarket.Data.Common.Repositories;
+using Metomarket.Data.Models;
+using Metomarket.Data.Repositories;
+using Metomarket.Data.Seeding;
+using Metomarket.Services.Data;
+using Metomarket.Services.Messaging;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Sandbox
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-
-    using Metomarket.Data;
-    using Metomarket.Data.Common;
-    using Metomarket.Data.Common.Repositories;
-    using Metomarket.Data.Models;
-    using Metomarket.Data.Repositories;
-    using Metomarket.Data.Seeding;
-    using Metomarket.Services.Data;
-    using Metomarket.Services.Messaging;
-
-    using CommandLine;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-
     public static class Program
     {
         public static int Main(string[] args)
