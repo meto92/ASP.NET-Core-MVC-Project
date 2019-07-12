@@ -9,6 +9,7 @@ using Metomarket.Data.Seeding;
 using Metomarket.Services.Data;
 using Metomarket.Services.Mapping;
 using Metomarket.Services.Messaging;
+using Metomarket.Services.Messaging.SendGrid;
 using Metomarket.Web.ViewModels;
 
 using Microsoft.AspNetCore.Builder;
@@ -50,6 +51,8 @@ namespace Metomarket.Web
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
+
+                    //options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserStore<ApplicationUserStore>()
@@ -95,8 +98,12 @@ namespace Metomarket.Web
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
+            // SendGrid auth
+            services.Configure<AuthSendGridOptions>(this.configuration);
+
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
+            //services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
         }

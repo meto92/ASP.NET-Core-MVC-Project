@@ -8,7 +8,7 @@ using Metomarket.Services.Messaging.SendGrid;
 
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
-
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace Metomarket.Services.Messaging
@@ -19,14 +19,20 @@ namespace Metomarket.Services.Messaging
         private const string AuthenticationScheme = "Bearer";
         private const string BaseUrl = "https://api.sendgrid.com/v3/";
         private const string SendEmailUrlPath = "mail/send";
+        private const string DefaultFromAddress = "admin@metomarket.bg";
+        private const string DefaultFromName = "Metomarket";
 
         private readonly string fromAddress;
         private readonly string fromName;
         private readonly HttpClient httpClient;
         private readonly ILogger logger;
 
-        public SendGridEmailSender(ILoggerFactory loggerFactory, string apiKey, string fromAddress, string fromName)
+        public SendGridEmailSender(ILoggerFactory loggerFactory, IOptions<AuthSendGridOptions> optionsAccessor)
         {
+            string apiKey = optionsAccessor.Value.SendGridKey;
+            string fromAddress = DefaultFromAddress;
+            string fromName = DefaultFromName;
+
             if (loggerFactory == null)
             {
                 throw new ArgumentNullException(nameof(loggerFactory));
