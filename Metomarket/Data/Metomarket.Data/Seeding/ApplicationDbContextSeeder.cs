@@ -24,10 +24,11 @@ namespace Metomarket.Data.Seeding
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger(typeof(ApplicationDbContextSeeder));
 
             var seeders = new List<ISeeder>
-                          {
-                              new RolesSeeder(),
-                              new SettingsSeeder(),
-                          };
+            {
+                new RolesSeeder(),
+                new RootAdministratorSeeder(),
+                new SettingsSeeder(),
+            };
 
             foreach (var seeder in seeders)
             {

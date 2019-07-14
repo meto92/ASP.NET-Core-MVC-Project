@@ -19,12 +19,16 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string InvalidLoginAttempMessage = "Invalid login attempt.";
+
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<LoginModel> logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger)
         {
             this.signInManager = signInManager;
+            this.userManager = userManager;
             this.logger = logger;
         }
 
@@ -61,9 +65,20 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
             if (this.ModelState.IsValid)
             {
+                var user = this.userManager.Users
+                    .Where(u => u.NormalizedEmail == this.Input.Email.ToUpper())
+                    .FirstOrDefault();
+
+                if (user == null)
+                {
+                    this.ModelState.AddModelError(string.Empty, InvalidLoginAttempMessage);
+                    return this.Page();
+                }
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await this.signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
+                var result = await this.signInManager.PasswordSignInAsync(user, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
+
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User logged in.");
@@ -82,7 +97,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    this.ModelState.AddModelError(string.Empty, InvalidLoginAttempMessage);
                     return this.Page();
                 }
             }

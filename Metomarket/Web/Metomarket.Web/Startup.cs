@@ -52,6 +52,7 @@ namespace Metomarket.Web
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
 
+                    options.User.RequireUniqueEmail = true;
                     //options.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -100,6 +101,8 @@ namespace Metomarket.Web
 
             // SendGrid auth
             services.Configure<AuthSendGridOptions>(this.configuration);
+
+            services.Configure<RootAdministratorOptions>(this.configuration);
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();

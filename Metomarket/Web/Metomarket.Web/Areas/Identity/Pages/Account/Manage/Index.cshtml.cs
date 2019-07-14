@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -30,7 +31,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             this.emailSender = emailSender;
         }
 
-        public string Username { get; set; }
+        public string Email { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
@@ -43,6 +44,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
@@ -52,11 +54,11 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             var email = await this.userManager.GetEmailAsync(user);
             var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
 
-            this.Username = userName;
+            this.Email = email;
 
             this.Input = new InputModel
             {
-                Email = email,
+                Username = userName,
                 PhoneNumber = phoneNumber,
             };
 
@@ -69,39 +71,35 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         {
             if (!this.ModelState.IsValid)
             {
-                return this.Page();
+                return await this.OnGetAsync();
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            var email = await this.userManager.GetEmailAsync(user);
-            if (this.Input.Email != email)
+            var username = await this.userManager.GetUserNameAsync(user);
+
+            if (this.Input.Username != username
+                && user.Email != GlobalConstants.RootAdministratorEmail
+                && user.UserName != GlobalConstants.RootAdministratorUsername)
             {
-                var setEmailResult = await this.userManager.SetEmailAsync(user, this.Input.Email);
-                if (!setEmailResult.Succeeded)
-                {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
-                }
+                await this.TryChangeUsernameAsync(user);
             }
 
             var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
+
             if (this.Input.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, this.Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-                }
+                await this.TryChangePhoneNumberAsync(user);
             }
 
             await this.signInManager.RefreshSignInAsync(user);
             this.StatusMessage = "Your profile has been updated";
+
             return this.RedirectToPage();
         }
 
@@ -113,6 +111,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
@@ -126,20 +125,44 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: this.Request.Scheme);
+
             await this.emailSender.SendEmailAsync(
                 email,
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             this.StatusMessage = "Verification email sent. Please check your email.";
+
             return this.RedirectToPage();
+        }
+
+        private async Task TryChangeUsernameAsync(ApplicationUser user)
+        {
+            var setUsernameResult = await this.userManager.SetUserNameAsync(user, this.Input.Username);
+
+            if (!setUsernameResult.Succeeded)
+            {
+                var userId = await this.userManager.GetUserIdAsync(user);
+                throw new InvalidOperationException($"Unexpected error occurred setting username for user with ID '{userId}'.");
+            }
+        }
+
+        private async Task TryChangePhoneNumberAsync(ApplicationUser user)
+        {
+            var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, this.Input.PhoneNumber);
+
+            if (!setPhoneResult.Succeeded)
+            {
+                var userId = await this.userManager.GetUserIdAsync(user);
+                throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+            }
         }
 
         public class InputModel
         {
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [StringLength(100, MinimumLength = 3)]
+            public string Username { get; set; }
 
             [Phone]
             [Display(Name = "Phone number")]
