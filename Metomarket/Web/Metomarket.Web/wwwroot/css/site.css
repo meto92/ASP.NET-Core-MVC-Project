@@ -1,56 +1,232 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+form.form .input-wrapper input {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
 
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
-}
+.site-header a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all; }
+
+.site-header a.nav-link,
+.site-header button {
+  background: #222; }
+  .site-header a.nav-link:hover,
+  .site-header button:hover {
+    color: #16C7FF !important; }
+
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  white-space: nowrap;
+  min-height: 60px;
+  line-height: 60px; }
+
+aside > nav {
+  /*position: fixed;*/ }
+  aside > nav li:not(:last-of-type) {
+    margin-bottom: 0.5rem; }
+  aside > nav a {
+    color: #fff; }
+    aside > nav a.active, aside > nav a:hover {
+      color: #fff;
+      background: #007BFF;
+      cursor: pointer; }
+  @media screen and (max-width: 767px) {
+    aside > nav {
+      position: static; } }
+
+::-webkit-scrollbar {
+  width: auto; }
+  ::-webkit-scrollbar-track {
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #fff; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#333, var(--blue), #333);
+    border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #333; }
+
+form.form {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #000;
+  border-radius: 0.2rem;
+  background: url("../img/form-bg.jpg") center center no-repeat;
+  background-size: cover;
+  color: #fff; }
+  form.form label {
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+    font-weight: bold; }
+  form.form .input-wrapper, form.form textarea {
+    margin-bottom: 1em; }
+  form.form .input-wrapper {
+    height: 2.75em;
+    position: relative;
+    border-radius: 0.3em;
+    display: flex;
+    align-items: center; }
+    form.form .input-wrapper i {
+      z-index: 1;
+      position: relative;
+      width: 1em;
+      color: #fff;
+      padding: 0;
+      margin: 0 0.75em; }
+    form textarea, form.form .input-wrapper input {
+      color: #fff;
+      background: #333;
+      border: 3px solid #fff;
+      border-radius: 1.2em;
+      outline: none; }
+      form input[type=submit]:hover, form textarea:focus, form.form .input-wrapper input:focus {
+        background: linear-gradient(90deg, #333, #00f, #333); }
+    form.form .input-wrapper input {
+      position: absolute;
+      width: 100%;
+      padding: 0 0.5em; }
+  form.form .input-wrapper.with-icon input {
+    padding: 0 0.5em 0 2.3em; }
+  form.form .radio {
+    position: relative;
+    left: 2rem; }
+
+@-webkit-keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+    form.form .radio input[type=radio] {
+      display: none; }
+      form.form .radio input[type=radio]:checked + .circle {
+        border-width: 4px; }
+        form.form .radio input[type=radio]:checked + .circle::before {
+          opacity: 1;
+          -webkit-animation: pulse 1.5s 1;
+          animation: pulse 1.5s 1; }
+    form.form .radio .circle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: -2rem;
+      top: 0.2rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 3px solid black;
+      border-radius: 50%; }
+      form.form .radio .circle::before {
+        opacity: 0;
+        display: block;
+        content: "";
+        position: absolute;
+        width: 55%;
+        height: 55%;
+        border-radius: 50%;
+        background: red;
+        transition: opacity 0.4s; }
+  form.form textarea {
+    resize: none;
+    padding: 1em;
+    overflow: hidden; }
+  form.form input[type=submit],
+  form.form button[type=submit] {
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1;
+    padding: 0.6em;
+    color: #fff;
+    background: #00f;
+    border: 2px solid #00f;
+    border: 2px solid #fff;
+    border-radius: 1em;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out; }
+
+@-webkit-keyframes btn-bg {
+  0% {
+    background: linear-gradient(90deg, #333, #00f, #333); }
+  to {
+    background: linear-gradient(90deg, #00f, #333, #00f); } }
+
+@keyframes btn-bg {
+  0% {
+    background: linear-gradient(90deg, #333, #00f, #333); }
+  to {
+    background: linear-gradient(90deg, #00f, #333, #00f); } }
+    form.form input[type=submit]:hover,
+    form.form button[type=submit]:hover {
+      -webkit-animation: btn-bg 1s linear infinite;
+      animation: btn-bg 1s linear infinite; }
+  form.form span.text-danger {
+    background: #fff;
+    font-weight: bold; }
+  form.form a {
+    background: #fff;
+    border-radius: 0.5em;
+    padding: 0.3em 0.5em; }
+  form.form ::-webkit-input-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  form.form ::-moz-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  form.form :-ms-input-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  form.form ::-ms-input-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  form.form ::placeholder {
+    color: #ccc;
+    font-style: italic; }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-    font-size: 14px;
-}
+  font-size: 14px; }
+
 @media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
+  html {
+    font-size: 16px; } }
 
 .border-top {
-    border-top: 1px solid #e5e5e5;
-}
+  border-top: 1px solid #e5e5e5; }
+
 .border-bottom {
-    border-bottom: 1px solid #e5e5e5;
-}
+  border-bottom: 1px solid #e5e5e5; }
 
 .box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05); }
 
 button.accept-policy {
-    font-size: 1rem;
-    line-height: inherit;
-}
+  font-size: 1rem;
+  line-height: inherit; }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-    position: relative;
-    min-height: 100%;
-}
+  position: relative;
+  min-height: 100%; }
 
 body {
-    /* Margin bottom by footer height */
-    margin-bottom: 60px;
-}
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    /* Set the fixed height of the footer here */
-    height: 60px;
-    line-height: 60px; /* Vertically center the text there */
-}
+  /* Margin bottom by footer height */
+  margin-bottom: 60px; }

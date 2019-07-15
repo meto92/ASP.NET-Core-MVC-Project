@@ -1,0 +1,182 @@
+﻿form.form {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #000;
+    border-radius: 0.2rem;
+    background: url('../img/form-bg.jpg') center center no-repeat;
+    background-size: cover;
+    color: #fff;
+
+    & label {
+        margin-bottom: 0.5em;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .input-wrapper, textarea {
+        margin-bottom: 1em;
+    }
+
+    .input-wrapper {
+        height: 2.75em;
+        position: relative;
+        border-radius: 0.3em;
+        display: flex;
+        align-items: center;
+
+        i {
+            z-index: 1;
+            position: relative;
+            width: 1em;
+            color: #fff;
+            padding: 0;
+            margin: 0 0.75em;
+            // @include mozilla {
+            //     transform: translateY(-44%);
+            // }
+        }
+
+        @at-root form textarea, & input {
+            color: #fff;
+            background: #333;
+            border: 3px solid #fff;
+            border-radius: 1.2em;
+            outline: none;
+
+            @at-root form input[type=submit]:hover,
+            &:focus {
+                background: linear-gradient(90deg, #333, $blue, #333);
+            }
+        }
+
+        input {
+            position: absolute;
+            width: 100%;
+            @extend %tlrb-zero;
+            padding: 0 0.5em;
+        }
+    }
+
+    .input-wrapper.with-icon input {
+        padding: 0 0.5em 0 2.3em;
+    }
+
+    .radio {
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(white, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(white, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(white, 0);
+            }
+        }
+
+        position: relative;
+        left: 2rem;
+
+        input[type=radio] {
+            display: none;
+
+            &:checked + .circle {
+                border-width: 4px;
+
+                &::before {
+                    opacity: 1;
+                    animation: pulse 1.5s 1;
+                }
+            }
+        }
+
+        .circle {
+            $circle-size: 1.5rem;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -2rem;
+            top: 0.2rem;
+            width: $circle-size;
+            height: $circle-size;
+            border: 3px solid black;
+            border-radius: 50%;
+
+            &::before {
+                $checked-size: 55%;
+
+                opacity: 0;
+                display: block;
+                content: "";
+                position: absolute;
+                width: $checked-size;
+                height: $checked-size;
+                border-radius: 50%;
+                background: red;
+                transition: opacity 0.4s;
+            }
+        }
+    }
+
+    textarea {
+        resize: none;
+        padding: 1em;
+        overflow: hidden;
+    }
+
+    input[type=submit],
+    button[type=submit] {
+        font-size: 1.2em;
+        font-weight: bold;
+        line-height: 1;
+        padding: 0.6em;
+        color: #fff;
+        background: $blue;
+        border: 2px solid $blue;
+        border: 2px solid #fff;
+        border-radius: 1em;
+        outline: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+
+        @keyframes btn-bg {
+            0% {
+                background: linear-gradient(90deg, #333, $blue, #333);
+            }
+
+            to {
+                background: linear-gradient(90deg, $blue, #333, $blue);
+            }
+        }
+
+        &:hover {
+            animation: btn-bg 1s linear infinite;
+        }
+        // &:hover {
+        //     background: $light-blue;
+        //     color: #000;
+        // }
+    }
+
+    span.text-danger {
+        background: #fff;
+        font-weight: bold;
+    }
+
+    a {
+        background: #fff;
+        border-radius: 0.5em;
+        padding: 0.3em 0.5em;
+    }
+
+    ::placeholder {
+        color: #ccc;
+        font-style: italic;
+    }
+}

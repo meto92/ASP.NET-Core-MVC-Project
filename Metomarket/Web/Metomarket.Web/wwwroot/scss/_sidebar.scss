@@ -1,0 +1,22 @@
+﻿aside > nav {
+    /*position: fixed;*/
+
+    li:not(:last-of-type) {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        color: #fff;
+
+        &.active,
+        &:hover {
+            color: #fff;
+            background: #007BFF;
+            cursor: pointer;
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        position: static;
+    }
+}
