@@ -4,6 +4,9 @@ form.form .input-wrapper input {
   right: 0;
   bottom: 0; }
 
+body, input, select, textarea, button {
+  font: inherit; }
+
 .site-header a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -17,6 +20,7 @@ form.form .input-wrapper input {
     color: #16C7FF !important; }
 
 .site-footer {
+  z-index: 10;
   position: fixed;
   bottom: 0;
   left: 15px;
@@ -62,13 +66,14 @@ form.form {
   background-size: cover;
   color: #fff; }
   form.form label {
-    margin-bottom: 0.5em;
     font-size: 1.2em;
     font-weight: bold; }
+    form.form label:not(.input-wrapper) {
+      margin: 0.5em 0; }
   form.form .input-wrapper, form.form textarea {
-    margin-bottom: 1em; }
+    margin-bottom: 0.5em; }
   form.form .input-wrapper {
-    height: 2.75em;
+    height: 2.75rem;
     position: relative;
     border-radius: 0.3em;
     display: flex;

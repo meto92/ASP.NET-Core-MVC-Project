@@ -9,18 +9,21 @@
     background-size: cover;
     color: #fff;
 
-    & label {
-        margin-bottom: 0.5em;
+    label {
         font-size: 1.2em;
         font-weight: bold;
+        
+        &:not(.input-wrapper) { 
+            margin: 0.5em 0;
+        }
     }
 
     .input-wrapper, textarea {
-        margin-bottom: 1em;
+        margin-bottom: 0.5em;
     }
 
     .input-wrapper {
-        height: 2.75em;
+        height: 2.75rem;
         position: relative;
         border-radius: 0.3em;
         display: flex;

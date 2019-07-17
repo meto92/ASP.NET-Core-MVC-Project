@@ -6,7 +6,7 @@
     <title>@this.ViewData["Title"] - Metomarket</title>
 
     <link href="~/css/reset.css" rel="stylesheet" />
-    
+
     <environment names="Development">
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
@@ -15,6 +15,8 @@
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
 </head>
 <body class="container-fluid">
     <header class="site-header">
@@ -43,14 +45,14 @@
         </nav>
     </header>
     
-    <div class="container">
+    <div class="container-fluid">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @this.RenderBody()
         </main>
     </div>
     
-    <footer class="border-top site-footer bg-dark text-white text-center">
+    <footer class="border-top site-footer bg-dark text-white text-center rounded">
         <div class="container">
             &copy; @DateTime.Now.Year - Metomarket - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
