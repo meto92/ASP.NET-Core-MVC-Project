@@ -1,0 +1,25 @@
+﻿@model Metomarket.Web.ViewModels.ProductTypes.ProductTypeCreateInputModel
+
+@{
+    ViewData["Title"] = "Create Product Type";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<section class="mt-4">
+    <form asp-action="Create" class="form mw-20r mx-auto">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <label class="input-wrapper">
+                <input asp-for="Name" class="form-control" placeholder="Product type . . ." />
+            </label>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        
+        <div class="text-center">
+            <input type="submit" value="Create" />
+        </div>
+    </form>
+</section>

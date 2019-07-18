@@ -1,12 +1,12 @@
 ﻿@model Metomarket.Web.ViewModels.Products.ProductCreateInputModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Product";
 }
 
-<h1 class="text-center">Create Product</h1>
+<h1 class="text-center">@ViewData["Title"]</h1>
 
-<section>
+<section class="mt-4">
     <form asp-action="Create" class="form mx-auto mw-40r">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 

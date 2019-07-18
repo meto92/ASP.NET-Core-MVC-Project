@@ -245,5 +245,8 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px; }
 
+.mw-20r {
+  max-width: 20rem; }
+
 .mw-40r {
   max-width: 40rem; }
