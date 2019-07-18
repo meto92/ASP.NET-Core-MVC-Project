@@ -1,0 +1,17 @@
+@mixin mq-min-w($min-width) {
+    @media screen and (min-width: $min-width) {
+        @content;
+    }
+}
+
+@mixin mq-max-w($max-width) {
+    @media screen and (max-width: $max-width) {
+        @content;
+    }
+}
+
+@mixin mozilla {
+    @-moz-document url-prefix() {
+        @content;
+    }
+}

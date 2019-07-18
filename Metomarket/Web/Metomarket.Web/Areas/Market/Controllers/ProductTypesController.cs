@@ -11,7 +11,29 @@ namespace Metomarket.Web.Areas.Market.Controllers
     {
         public IActionResult Index()
         {
-            return this.View();
+            ProductTypesListViewModel model = new ProductTypesListViewModel
+            {
+                ProductTypes = new ProductTypeViewModel[]
+                {
+                    new ProductTypeViewModel
+                    {
+                        Name = "Type 1",
+                        ProductsCount = 10,
+                    },
+                    new ProductTypeViewModel
+                    {
+                        Name = "Type 2",
+                        ProductsCount = 20,
+                    },
+                    new ProductTypeViewModel
+                    {
+                        Name = "Type 3",
+                        ProductsCount = 30,
+                    },
+                },
+            };
+
+            return this.View(model);
         }
 
         public IActionResult Create()

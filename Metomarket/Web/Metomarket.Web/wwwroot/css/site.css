@@ -250,3 +250,16 @@ body {
 
 .mw-40r {
   max-width: 40rem; }
+
+@media screen and (max-width: 767px) {
+  .product-types-index table > thead {
+    display: none; }
+  .product-types-index table td {
+    display: block;
+    width: 100%; }
+    .product-types-index table td::before {
+      padding-right: 1em; }
+    .product-types-index table td:nth-child(2n - 1)::before {
+      content: "Product Type:"; }
+    .product-types-index table td:nth-child(2n)::before {
+      content: "Products Count:"; } }

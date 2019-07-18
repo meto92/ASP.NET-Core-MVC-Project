@@ -1,0 +1,33 @@
+﻿@model Metomarket.Web.ViewModels.ProductTypes.ProductTypesListViewModel
+
+@{
+    ViewData["Title"] = "Product Types";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<section class="product-types-index">
+    <div class="row">
+        <table class="table table-dark table-striped table-hover col-md-8 rounded mx-auto">
+            <thead>
+                <tr class="text-center1">
+                    <th scope="row">Product Type</th>
+                    <th>Products Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var productType in Model.ProductTypes)
+                {
+                    <tr>
+                        <td>@productType.Name</td>
+                        <td>@productType.ProductsCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="w-100 text-center">
+            <a asp-area="Market" asp-controller="ProductTypes" asp-action="Create" class="btn btn-primary">Create New Product Type</a>
+        </div>
+    </div>
+</section>
