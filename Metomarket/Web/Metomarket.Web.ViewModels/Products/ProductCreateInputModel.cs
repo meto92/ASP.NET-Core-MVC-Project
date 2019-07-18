@@ -10,6 +10,7 @@ namespace Metomarket.Web.ViewModels.Products
         private const string PriceMinValue = "0.01";
         private const string PriceMaxValue = "1000000";
         private const string InStockDisplayName = "Initial quantity";
+        private const string ImageUrlDisplayName = "Image URL";
         private const string TypeIdDisplayName = "Type";
 
         [Required]
@@ -22,6 +23,11 @@ namespace Metomarket.Web.ViewModels.Products
         [Range(0, InStockMaxValue)]
         [Display(Name = InStockDisplayName)]
         public int InStock { get; set; }
+
+        [Required]
+        [DataType(DataType.Url)]
+        [Display(Name = ImageUrlDisplayName)]
+        public string ImageUrl { get; set; }
 
         [Required]
         [Display(Name = TypeIdDisplayName)]

@@ -27,6 +27,14 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label"></label>
+            <label class="input-wrapper">
+                <input asp-for="ImageUrl" class="form-control" placeholder="Image URL . . ." />
+            </label>
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
             <label asp-for="InStock" class="control-label"></label>
             <label class="input-wrapper">
                 <input asp-for="InStock" min="0" />
