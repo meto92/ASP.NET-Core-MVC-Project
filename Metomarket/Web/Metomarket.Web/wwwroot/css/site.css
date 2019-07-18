@@ -72,8 +72,10 @@ form.form {
       margin: 0.5em 0; }
   form.form .input-wrapper, form.form textarea {
     margin-bottom: 0.5em; }
+  form.form .input-wrapper,
+  form.form select {
+    height: 2.75rem; }
   form.form .input-wrapper {
-    height: 2.75rem;
     position: relative;
     border-radius: 0.3em;
     display: flex;
@@ -85,13 +87,13 @@ form.form {
       color: #fff;
       padding: 0;
       margin: 0 0.75em; }
-    form textarea, form.form .input-wrapper input {
+    .form textarea, .form select, form.form .input-wrapper input {
       color: #fff;
       background: #333;
       border: 3px solid #fff;
       border-radius: 1.2em;
       outline: none; }
-      form input[type=submit]:hover, form textarea:focus, form.form .input-wrapper input:focus {
+      .form input[type=submit]:hover, .form textarea:focus, .form select:focus, form.form .input-wrapper input:focus {
         background: linear-gradient(90deg, #333, #00f, #333); }
     form.form .input-wrapper input {
       position: absolute;
@@ -99,6 +101,13 @@ form.form {
       padding: 0 0.5em; }
   form.form .input-wrapper.with-icon input {
     padding: 0 0.5em 0 2.3em; }
+  form.form select {
+    padding: 0 0.5rem;
+    width: 100%; }
+    form.form select option {
+      color: #000;
+      border-radius: 0.5em;
+      overflow: hidden; }
   form.form .radio {
     position: relative;
     left: 2rem; }
@@ -235,3 +244,6 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px; }
+
+.mw-40r {
+  max-width: 40rem; }

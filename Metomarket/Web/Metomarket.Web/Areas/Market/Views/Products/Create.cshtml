@@ -1,0 +1,51 @@
+﻿@model Metomarket.Web.ViewModels.Products.ProductCreateInputModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-center">Create Product</h1>
+
+<section>
+    <form asp-action="Create" class="form mx-auto mw-40r">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <label class="input-wrapper">
+                <input asp-for="Name" class="form-control" placeholder="Product name . . ." />
+            </label>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price" class="control-label"></label>
+            <label class="input-wrapper">
+                <input asp-for="Price" class="form-control" />
+            </label>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="InStock" class="control-label"></label>
+            <label class="input-wrapper">
+                <input asp-for="InStock" min="0" />
+            </label>
+            <span asp-validation-for="InStock" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TypeId"></label>
+            <select asp-for="TypeId">
+                @* view component with options *@
+                <option value="1">Type 1</option>
+                <option value="2">Type 2</option>
+                <option value="3">Type 3</option>
+            </select>
+        </div>
+
+        <div class="text-center">
+            <input type="submit" value="Create" />
+        </div>
+    </form>
+</section>

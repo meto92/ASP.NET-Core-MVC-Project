@@ -12,8 +12,8 @@
     label {
         font-size: 1.2em;
         font-weight: bold;
-        
-        &:not(.input-wrapper) { 
+
+        &:not(.input-wrapper) {
             margin: 0.5em 0;
         }
     }
@@ -22,8 +22,12 @@
         margin-bottom: 0.5em;
     }
 
-    .input-wrapper {
+    .input-wrapper,
+    select {
         height: 2.75rem;
+    }
+
+    .input-wrapper {
         position: relative;
         border-radius: 0.3em;
         display: flex;
@@ -41,14 +45,14 @@
             // }
         }
 
-        @at-root form textarea, & input {
+        @at-root .form textarea, .form select, & input {
             color: #fff;
             background: #333;
             border: 3px solid #fff;
             border-radius: 1.2em;
             outline: none;
 
-            @at-root form input[type=submit]:hover,
+            @at-root .form input[type=submit]:hover,
             &:focus {
                 background: linear-gradient(90deg, #333, $blue, #333);
             }
@@ -64,6 +68,17 @@
 
     .input-wrapper.with-icon input {
         padding: 0 0.5em 0 2.3em;
+    }
+
+    select {
+        padding: 0 0.5rem;
+        width: 100%;
+
+        option {
+            color: #000;
+            border-radius: 0.5em;
+            overflow: hidden;
+        }
     }
 
     .radio {
