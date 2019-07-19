@@ -1,0 +1,33 @@
+﻿@model Metomarket.Web.ViewModels.CreditCompanies.CreditCompanyCreateInputModel
+
+@{
+    ViewData["Title"] = "Create Credit Company";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<section class="mt-4">
+    <form asp-action="Create" class="form mw-30r mx-auto">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <label class="input-wrapper">
+                <input asp-for="Name" placeholder="Name . . ." />
+            </label>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ActiveSincce"></label>
+            <label class="input-wrapper">
+                <input asp-for="ActiveSincce" class="position-relative" type="date" />
+            </label>
+            <span asp-validation-for="ActiveSincce" class="text-danger"></span>
+        </div>
+
+        <div class="text-center">
+            <input type="submit" value="Create" />
+        </div>
+    </form>
+</section>

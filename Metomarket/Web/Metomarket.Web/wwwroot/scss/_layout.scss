@@ -1,7 +1,5 @@
-﻿.mw-20r {
-    max-width: 20rem;
-}
-
-.mw-40r {
-    max-width: 40rem;
+﻿@for $i from 2 through 4 {
+    .mw-#{$i}0r {
+        max-width: #{$i}0rem;
+    }
 }
