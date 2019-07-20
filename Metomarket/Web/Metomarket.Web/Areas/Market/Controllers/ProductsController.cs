@@ -45,7 +45,24 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult Edit(string id)
         {
-            return this.Content(id);
+            ProductEditModel model = new ProductEditModel
+            {
+                Id = "2",
+                ImageUrl = "https://i5.walmartimages.ca/images/Enlarge/010/121/6000199010121.jpg",
+                Price = 2500.99m,
+                Name = "TV name",
+                Type = "TV",
+                InStock = 0,
+            };
+
+            return this.View(model);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [HttpPost]
+        public IActionResult Edit(ProductEditModel model)
+        {
+            return this.Content($"{model.Name}, {model.Price}, {model.ImageUrl}, {model.QuantityToAdd}");
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
@@ -54,6 +71,7 @@ namespace Metomarket.Web.Areas.Market.Controllers
             return this.Content(id);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult InitializeOrder(string productId)
         {
