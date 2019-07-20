@@ -13,7 +13,7 @@
 
 <section>
     <div class="row mt-4">
-        <div class="col-md-4 d-flex justify-content-center align-items-center border">
+        <div class="col-md-4 d-flex justify-content-center align-items-center border mr-md-4">
             <img class="img-fluid" src="@Model.ImageUrl" alt="@Model.Name image" />
         </div>
         <div class="col d-flex flex-column mt-4 mt-md-0 text-center text-md-left bg-dark text-white py-3 rounded">
@@ -27,12 +27,16 @@
                 <div class="mt-auto">
                     @if (Model.InStock > 0)
                     {
-                        <a class="btn btn-primary mr-2" asp-area="Market" asp-controller="Products" asp-action="Order" asp-route-id="@Model.Id">Order</a>
+                        <form asp-action="InitializeOrder" class="d-inline-block mr-2">
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-primary">Create Order</button>
+                        </form>
                     }
 
                     @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {
-                        <a class="btn btn-primary" asp-area="Market" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <a class="btn btn-warning mr-2 mt-2" asp-area="Market" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <a class="btn btn-danger mt-2" asp-area="Market" asp-controller="Products" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
                     }
                 </div>
             }

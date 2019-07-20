@@ -1,6 +1,7 @@
 ﻿using Metomarket.Common;
-using Metomarket.Web.Controllers;
+using Metomarket.Web.ViewModels.Orders;
 using Metomarket.Web.ViewModels.Products;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,6 +40,42 @@ namespace Metomarket.Web.Areas.Market.Controllers
             };
 
             return this.View(model);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult Edit(string id)
+        {
+            return this.Content(id);
+        }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public IActionResult Delete(string id)
+        {
+            return this.Content(id);
+        }
+
+        [HttpPost]
+        public IActionResult InitializeOrder(string productId)
+        {
+            return this.RedirectToAction(nameof(this.CreateOrder), new { id = productId });
+        }
+
+        [Authorize]
+        public IActionResult CreateOrder(string id)
+        {
+            return this.View(new ProductCreateOrderViewModel
+            {
+                Id = "2",
+                Price = 2500.99m,
+                Name = "TV name",
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult CreateOrder(OrderCreateInputModel model)
+        {
+            return this.Content($"{model.ProductId}, {model.Quantity}");
         }
     }
 }
