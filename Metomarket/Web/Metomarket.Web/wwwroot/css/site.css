@@ -245,6 +245,13 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px; }
 
+.card .card-img-top {
+  transition: transform 0.5s ease-in-out; }
+
+@media screen and (min-width: 768px) {
+  .card .card-img-top:hover {
+    transform: scale(1.25) rotateY(180deg) rotateX(360deg); } }
+
 .mw-20r {
   max-width: 20rem; }
 

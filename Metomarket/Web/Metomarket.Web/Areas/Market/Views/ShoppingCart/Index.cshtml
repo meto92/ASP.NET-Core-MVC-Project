@@ -1,0 +1,48 @@
+﻿@model Metomarket.Web.ViewModels.ShoppingCart.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+
+<div class="mt-4">
+    <section class="row">
+        @for (int i = 0; i < 5; i++)
+        {
+            @foreach (var order in Model.Orders)
+            {
+                <div class="col-sm-6 col-md-3 col-xl-2 mb-3 d-flex">
+                    <div class="card bg-dark text-white">
+                        <img class="card-img-top" src="@order.Product.ImageUrl" alt="@order.Product.Name image">
+                        <div class="card-body d-flex align-items-center flex-column">
+                            <h4 class="card-title text-center">@order.Product.Name</h4>
+                            <p><b>Price:</b> $@($"{order.Product.Price:f2}")</p>
+                            <p><b>Quantity:</b> @order.Quantity</p>
+                            <p><b>Total:</b> $@($"{order.Quantity * order.Product.Price:f2}")</p>
+                            <a asp-area="Market" asp-controller="ShoppingCart" asp-action="DeleteOrder" asp-route-id="@order.Id" class="btn btn-danger mt-auto">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </section>
+
+    @if (Model.Orders.Count() == 0)
+    {
+        <h2 class="text-center">Shopping cart is empty.</h2>
+    }
+    else
+    {
+        <h2 class="text-center">Total: $@($"{Model.Total:f2}")</h2>
+
+        <div class="text-center">
+            <form asp-action="ConfirmOrders" class="d-md-inline-block mr-md-3">
+                <button type="submit" class="btn btn-primary">Confirm Orders</button>
+            </form>
+            <form asp-action="EmptyCart" class="d-md-inline-block mt-2 mt-md-0">
+                <button type="submit" class="btn btn-danger">Empty Cart</button>
+            </form>
+        </div>
+    }
+</div>
