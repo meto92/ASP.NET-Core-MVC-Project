@@ -49,10 +49,31 @@ namespace Metomarket.Web.Areas.Market.Controllers
             return this.Content(id);
         }
 
-        [HttpPost]
-        public IActionResult ConfirmOrders()
+        public IActionResult CompleteOrders()
         {
-            throw new System.Exception();
+            CompleteOrdersModel model = new CompleteOrdersModel
+            {
+                Total = 1234.567m,
+                OrdersCount = 4,
+            };
+
+            if (model.OrdersCount == 0)
+            {
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult CompleteOrders(CompleteOrdersModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.CompleteOrders));
+            }
+
+            return this.Content($"id: {model.CreditCompanyId}, card number:{model.CreditCardNumber}, period: {model.PeriodInMonths}");
         }
 
         [HttpPost]

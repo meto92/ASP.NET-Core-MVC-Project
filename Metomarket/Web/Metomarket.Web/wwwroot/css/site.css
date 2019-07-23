@@ -141,7 +141,7 @@ form.form {
       justify-content: center;
       position: absolute;
       left: -2rem;
-      top: 0.2rem;
+      top: 0;
       width: 1.5rem;
       height: 1.5rem;
       border: 3px solid black;

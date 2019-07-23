@@ -37,9 +37,7 @@
         <h2 class="text-center">Total: $@($"{Model.Total:f2}")</h2>
 
         <div class="text-center">
-            <form asp-action="ConfirmOrders" class="d-md-inline-block mr-md-3">
-                <button type="submit" class="btn btn-primary">Confirm Orders</button>
-            </form>
+            <a asp-area="Market" asp-controller="ShoppingCart" asp-action="CompleteOrders" class="btn btn-primary">Complete Orders</a>
             <form asp-action="EmptyCart" class="d-md-inline-block mt-2 mt-md-0">
                 <button type="submit" class="btn btn-danger">Empty Cart</button>
             </form>

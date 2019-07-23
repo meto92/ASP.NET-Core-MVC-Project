@@ -1,0 +1,86 @@
+﻿@model Metomarket.Web.ViewModels.ShoppingCart.CompleteOrdersModel
+
+@{
+    ViewData["Title"] = "Complete Orders";
+}
+
+<h1 class="text-center">@this.ViewData["Title"]</h1>
+
+<section class="mt-4 mw-30r mx-auto">
+    <form asp-action="ConfirmOrders" class="form">
+        <div class="form-group">
+            <label asp-for="Total"></label>
+            <label class="input-wrapper">
+                <input asp-for="Total" value="$@($"{Model.Total:f2}")" disabled />
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="OrdersCount"></label>
+            <label class="input-wrapper">
+                <input asp-for="OrdersCount" disabled />
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PeriodInMonths"></label>
+
+            <label class="radio d-block">
+                3 months
+                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="3" checked />
+                <span class="circle"></span>
+            </label>
+            <label class="radio d-block">
+                6 months
+                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="6" />
+                <span class="circle"></span>
+            </label>
+            <label class="radio d-block">
+                12 months
+                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="12" />
+                <span class="circle"></span>
+            </label>
+            <label class="radio d-block">
+                24 months
+                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="24" />
+                <span class="circle"></span>
+            </label>
+            <span asp-validation-for="PeriodInMonths" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Price per month</label>
+            <label class="input-wrapper">
+                <input name="price-per-month" disabled />
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CreditCompanyId"></label>
+            <select asp-for="CreditCompanyId">
+                <option value="1" selected>Company 1</option>
+                <option value="2">Company 2</option>
+                <option value="3">Company 3</option>
+                <option value="4">Company 4</option>
+            </select>
+            <span asp-validation-for="CreditCompanyId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CreditCardNumber"></label>
+            <label class="input-wrapper with-icon">
+                <i class="far fa-credit-card"></i>
+                <input asp-for="CreditCardNumber" placeholder="Enter your credit card number" />
+            </label>
+            <span asp-validation-for="CreditCardNumber" class="text-danger"></span>
+        </div>
+
+        <div class="text-center">
+            <button type="submit">Complete Orders</button>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <script src="~/js/complete-orders.js"></script>
+}
