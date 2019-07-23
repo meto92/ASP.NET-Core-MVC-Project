@@ -6,15 +6,18 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 {
     public static class ManageNavPages
     {
-        public static string Index => "Index";
+        private const string ViewDataActivePageKey = "ActivePage";
+        private const string ActiveClassName = "active";
 
-        public static string ChangePassword => "ChangePassword";
+        public static string Index => nameof(Index);
 
-        public static string ExternalLogins => "ExternalLogins";
+        public static string ChangePassword => nameof(ChangePassword);
 
-        public static string PersonalData => "PersonalData";
+        public static string ExternalLogins => nameof(ExternalLogins);
 
-        public static string TwoFactorAuthentication => "TwoFactorAuthentication";
+        public static string PersonalData => nameof(PersonalData);
+
+        public static string TwoFactorAuthentication => nameof(TwoFactorAuthentication);
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
@@ -28,9 +31,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {
-            var activePage = viewContext.ViewData["ActivePage"] as string
+            var activePage = viewContext.ViewData[ViewDataActivePageKey] as string
                 ?? System.IO.Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
-            return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase) ? "active" : null;
+
+            return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase) ? ActiveClassName : null;
         }
     }
 }

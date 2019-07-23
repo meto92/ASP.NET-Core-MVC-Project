@@ -273,3 +273,19 @@ body {
       content: "Product Type:"; }
     .product-types-index table td:nth-child(2n)::before {
       content: "Products Count:"; } }
+
+@media screen and (max-width: 767px) {
+  .admin-users-index table > thead {
+    display: none; }
+  .admin-users-index table td {
+    display: block;
+    width: 100%; }
+    .admin-users-index table td::before {
+      padding-right: 1em;
+      font-weight: bold; }
+    .admin-users-index table td:nth-child(3n - 2)::before {
+      content: "Username:"; }
+    .admin-users-index table td:nth-child(3n - 1)::before {
+      content: "Email:"; }
+    .admin-users-index table td:nth-child(3n)::before {
+      content: "Action:"; } }
