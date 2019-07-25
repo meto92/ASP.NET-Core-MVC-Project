@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Metomarket.Data.Common.Models;
+using Metomarket.Data.EntityConfigurations;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -24,7 +25,17 @@ namespace Metomarket.Data
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
+        public DbSet<Product> Products { get; set; }
+
+        public DbSet<ProductType> ProductTypes { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+        public DbSet<CreditCompany> CreditCompanies { get; set; }
+
+        public DbSet<Contract> Contracts { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -50,7 +61,7 @@ namespace Metomarket.Data
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 
-            ConfigureUserIdentityRelations(builder);
+            ConfigureEntities(builder);
 
             EntityIndexesConfiguration.Configure(builder);
 
@@ -59,6 +70,7 @@ namespace Metomarket.Data
             // Set global query filter for not deleted entities only
             var deletableEntityTypes = entityTypes
                 .Where(et => et.ClrType != null && typeof(IDeletableEntity).IsAssignableFrom(et.ClrType));
+
             foreach (var deletableEntityType in deletableEntityTypes)
             {
                 var method = SetIsDeletedQueryFilterMethod.MakeGenericMethod(deletableEntityType.ClrType);
@@ -68,34 +80,24 @@ namespace Metomarket.Data
             // Disable cascade delete
             var foreignKeys = entityTypes
                 .SelectMany(e => e.GetForeignKeys().Where(f => f.DeleteBehavior == DeleteBehavior.Cascade));
+
             foreach (var foreignKey in foreignKeys)
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
         }
 
-        private static void ConfigureUserIdentityRelations(ModelBuilder builder)
+        private static void ConfigureEntities(ModelBuilder builder)
         {
-            builder.Entity<ApplicationUser>()
-                .HasMany(e => e.Claims)
-                .WithOne()
-                .HasForeignKey(e => e.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+            void ApplyConfiguration<TEntity, TEntityConfiguration>()
+                where TEntity : class
+                where TEntityConfiguration : IEntityTypeConfiguration<TEntity>, new()
+                => builder.ApplyConfiguration(new TEntityConfiguration());
 
-            builder.Entity<ApplicationUser>()
-                .HasMany(e => e.Logins)
-                .WithOne()
-                .HasForeignKey(e => e.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<ApplicationUser>()
-                .HasMany(e => e.Roles)
-                .WithOne()
-                .HasForeignKey(e => e.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+            ApplyConfiguration<ApplicationUser, ApplicationUserConfiguration>();
+            ApplyConfiguration<Product, ProductConfiguration>();
+            ApplyConfiguration<ProductType, ProductTypeConfiguration>();
+            ApplyConfiguration<CreditCompany, CreditCompanyConfiguration>();
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
@@ -115,6 +117,7 @@ namespace Metomarket.Data
             foreach (var entry in changedEntries)
             {
                 var entity = (IAuditInfo)entry.Entity;
+
                 if (entry.State == EntityState.Added && entity.CreatedOn == default)
                 {
                     entity.CreatedOn = DateTime.UtcNow;

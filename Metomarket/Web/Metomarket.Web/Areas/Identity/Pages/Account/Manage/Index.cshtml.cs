@@ -160,12 +160,16 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 
         public class InputModel
         {
+            private const int UsernameMinLength = GlobalConstants.UsernameMinLength;
+            private const int UsernameMaxLength = GlobalConstants.UsernameMaxLength;
+            private const string PhoneNumberDisplayName = "Phone number";
+
             [Required]
-            [StringLength(100, MinimumLength = 3)]
+            [StringLength(UsernameMaxLength, MinimumLength = UsernameMinLength)]
             public string Username { get; set; }
 
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = PhoneNumberDisplayName)]
             public string PhoneNumber { get; set; }
         }
     }

@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Metomarket.Common;
+
 namespace Metomarket.Web.ViewModels.Products
 {
     public class ProductEditModel
     {
-        private const int NameMinLength = 2;
-        private const int NameMaxLength = 20;
+        private const int NameMinLength = GlobalConstants.ProductNameMinLength;
+        private const int NameMaxLength = GlobalConstants.ProductNameMaxLength;
         private const string PriceMinValue = "0.01";
         private const string PriceMaxValue = "1000000";
+        private const int ImageUrlMaxLength = GlobalConstants.ProductImageUrlMaxLength;
         private const string ImageUrlDisplayName = "Image URL";
         private const string InStockDisplayName = "Current Quantity";
         private const int InStockMaxValue = 1000;
@@ -25,6 +28,7 @@ namespace Metomarket.Web.ViewModels.Products
         public decimal Price { get; set; }
 
         [DataType(DataType.Url)]
+        [StringLength(ImageUrlMaxLength)]
         [Display(Name = ImageUrlDisplayName)]
         public string ImageUrl { get; set; }
 

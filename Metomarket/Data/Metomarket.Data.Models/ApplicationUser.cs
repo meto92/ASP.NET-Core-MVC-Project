@@ -12,10 +12,17 @@ namespace Metomarket.Data.Models
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.ShoppingCart = new ShoppingCart();
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Address { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }
@@ -26,6 +33,8 @@ namespace Metomarket.Data.Models
         public bool IsDeleted { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+
+        public ShoppingCart ShoppingCart { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

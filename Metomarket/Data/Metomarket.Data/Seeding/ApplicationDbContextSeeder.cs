@@ -27,7 +27,6 @@ namespace Metomarket.Data.Seeding
             {
                 new RolesSeeder(),
                 new RootAdministratorSeeder(),
-                new SettingsSeeder(),
             };
 
             foreach (var seeder in seeders)

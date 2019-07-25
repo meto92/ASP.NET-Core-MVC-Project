@@ -1,15 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Metomarket.Common;
+
 namespace Metomarket.Web.ViewModels.Products
 {
     public class ProductCreateInputModel
     {
-        private const int NameMinLength = 2;
-        private const int NameMaxLength = 20;
+        private const int NameMinLength = GlobalConstants.ProductNameMinLength;
+        private const int NameMaxLength = GlobalConstants.ProductNameMaxLength;
         private const int InStockMaxValue = 1000;
         private const string PriceMinValue = "0.01";
         private const string PriceMaxValue = "1000000";
         private const string InStockDisplayName = "Initial quantity";
+        private const int ImageUrlMaxLength = GlobalConstants.ProductImageUrlMaxLength;
         private const string ImageUrlDisplayName = "Image URL";
         private const string TypeIdDisplayName = "Type";
 
@@ -26,6 +29,7 @@ namespace Metomarket.Web.ViewModels.Products
 
         [Required]
         [DataType(DataType.Url)]
+        [StringLength(ImageUrlMaxLength)]
         [Display(Name = ImageUrlDisplayName)]
         public string ImageUrl { get; set; }
 

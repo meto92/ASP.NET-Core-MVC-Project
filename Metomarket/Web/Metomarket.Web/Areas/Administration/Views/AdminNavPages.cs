@@ -23,8 +23,8 @@ namespace Metomarket.Web.Areas.Administration.Views
             var activePage = viewContext.ViewData[ViewDataActivePageKey] as string
                 ?? Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
 
-            return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase) 
-                ? ActiveClassName 
+            return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase)
+                ? ActiveClassName
                 : null;
         }
     }
