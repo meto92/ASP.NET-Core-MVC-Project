@@ -1,4 +1,7 @@
-﻿using Metomarket.Common;
+﻿using System.Threading.Tasks;
+
+using Metomarket.Common;
+using Metomarket.Services.Data;
 using Metomarket.Web.ViewModels.ProductTypes;
 
 using Microsoft.AspNetCore.Authorization;
@@ -9,28 +12,18 @@ namespace Metomarket.Web.Areas.Market.Controllers
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class ProductTypesController : MarketController
     {
+        private readonly IProductTypeService productTypeService;
+
+        public ProductTypesController(IProductTypeService productTypeService)
+        {
+            this.productTypeService = productTypeService;
+        }
+
         public IActionResult Index()
         {
             ProductTypesListViewModel model = new ProductTypesListViewModel
             {
-                ProductTypes = new ProductTypeViewModel[]
-                {
-                    new ProductTypeViewModel
-                    {
-                        Name = "Type 1",
-                        ProductsCount = 10,
-                    },
-                    new ProductTypeViewModel
-                    {
-                        Name = "Type 2",
-                        ProductsCount = 20,
-                    },
-                    new ProductTypeViewModel
-                    {
-                        Name = "Type 3",
-                        ProductsCount = 30,
-                    },
-                },
+                ProductTypes = this.productTypeService.All<ProductTypeViewModel>(),
             };
 
             return this.View(model);
@@ -42,12 +35,14 @@ namespace Metomarket.Web.Areas.Market.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductTypeCreateInputModel model)
+        public async Task<IActionResult> Create(ProductTypeCreateInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
+
+            await this.productTypeService.CreateAsync(model.Name);
 
             return this.RedirectToAction(nameof(this.Index));
         }

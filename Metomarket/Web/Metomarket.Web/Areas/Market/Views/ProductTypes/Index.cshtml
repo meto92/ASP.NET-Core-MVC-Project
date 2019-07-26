@@ -23,6 +23,15 @@
                         <td>@productType.ProductsCount</td>
                     </tr>
                 }
+
+                @if (Model.ProductTypes.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <h4>No product types in database</h4>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
