@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -50,7 +51,16 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? this.Url.Content("~/");
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = this.Input.Username,
+                    Email = this.Input.Email,
+                    FirstName = this.Input.FirstName,
+                    LastName = this.Input.LastName,
+                    Address = this.Input.Address,
+                    PhoneNumber = this.Input.PhoneNumber,
+                };
+
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
                 if (result.Succeeded)
                 {
@@ -84,20 +94,50 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            private const int UsernameMinLength = GlobalConstants.UsernameMinLength;
+            private const int UsernameMaxLength = GlobalConstants.UsernameMaxLength;
+            private const int AddressMinLength = 10;
+            private const int AddressMaxLength = GlobalConstants.UserAddressMaxLength;
+            private const int FirstNameMaxLength = GlobalConstants.UserFirstNameMaxLength;
+            private const string FirstNameDisplayName = "First name";
+            private const int LastNameMaxLength = GlobalConstants.UserLastNameMaxLength;
+            private const string LastNameDisplayName = "Last name";
+            private const int PasswordMinLength = 6;
+            private const int PasswordMaxLength = 100;
+            private const string ConfirmPasswordDisplayName = "Confirm password";
+            private const string PasswordsDoNotMatchMessage = "The password and confirmation password do not match.";
+
+            [Required]
+            [StringLength(UsernameMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = UsernameMinLength)]
+            public string Username { get; set; }
+
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(AddressMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = AddressMinLength)]
+            public string Address { get; set; }
+
+            [StringLength(FirstNameMaxLength)]
+            [Display(Name = FirstNameDisplayName)]
+            public string FirstName { get; set; }
+
+            [StringLength(LastNameMaxLength)]
+            [Display(Name = LastNameDisplayName)]
+            public string LastName { get; set; }
+
+            [Phone]
+            public string PhoneNumber { get; set; }
+
+            [Required]
+            [StringLength(PasswordMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = PasswordMinLength)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = ConfirmPasswordDisplayName)]
+            [Compare(nameof(Password), ErrorMessage = PasswordsDoNotMatchMessage)]
             public string ConfirmPassword { get; set; }
         }
     }
