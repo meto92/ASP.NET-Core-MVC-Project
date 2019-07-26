@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Metomarket.Web.Infrastructure.ComponentViewModels.ProductTypes.ProductTypeOptionViewModel>
+
+@foreach (var productType in Model)
+{
+    <option value="@productType.Id">@productType.Name</option>
+}

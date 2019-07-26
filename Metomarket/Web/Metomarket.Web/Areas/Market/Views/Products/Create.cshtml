@@ -45,10 +45,8 @@
         <div class="form-group">
             <label asp-for="TypeId"></label>
             <select asp-for="TypeId">
-                @* view component with options *@
-                <option value="1">Type 1</option>
-                <option value="2">Type 2</option>
-                <option value="3">Type 3</option>
+                @*<vc:ProductTypeSelectOptions></vc:ProductTypeSelectOptions>*@
+                @await Component.InvokeAsync("ProductTypeSelectOptions")
             </select>
         </div>
 

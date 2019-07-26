@@ -10,6 +10,7 @@ using Metomarket.Services.Data;
 using Metomarket.Services.Mapping;
 using Metomarket.Services.Messaging;
 using Metomarket.Services.Messaging.SendGrid;
+using Metomarket.Web.Infrastructure.ComponentViewModels.ProductTypes;
 using Metomarket.Web.ViewModels;
 
 using Microsoft.AspNetCore.Builder;
@@ -111,12 +112,15 @@ namespace Metomarket.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IProductTypeService, ProductTypeService>();
+            services.AddTransient<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(ProductTypeOptionViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())

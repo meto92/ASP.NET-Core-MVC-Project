@@ -1,4 +1,7 @@
-﻿using Metomarket.Common;
+﻿using System.Threading.Tasks;
+
+using Metomarket.Common;
+using Metomarket.Services.Data;
 using Metomarket.Web.ViewModels.Orders;
 using Metomarket.Web.ViewModels.Products;
 
@@ -9,6 +12,13 @@ namespace Metomarket.Web.Areas.Market.Controllers
 {
     public class ProductsController : MarketController
     {
+        private readonly IProductService productService;
+
+        public ProductsController(IProductService productService)
+        {
+            this.productService = productService;
+        }
+
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult Create()
         {
@@ -17,12 +27,14 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         [HttpPost]
-        public IActionResult Create(ProductCreateInputModel model)
+        public async Task<IActionResult> Create(ProductCreateInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
+
+            await this.productService.CreateAsync(model.Name, model.Price, model.ImageUrl, model.InStock, model.TypeId);
 
             return this.Redirect("/");
         }
