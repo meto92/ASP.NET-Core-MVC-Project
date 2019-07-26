@@ -1,4 +1,8 @@
-﻿using Metomarket.Web.Areas.Administration.ViewModels.Users;
+﻿using System.Threading.Tasks;
+
+using Metomarket.Common;
+using Metomarket.Services.Data;
+using Metomarket.Web.ViewModels.Users;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,40 +10,62 @@ namespace Metomarket.Web.Areas.Administration.Controllers
 {
     public class UsersController : AdministrationController
     {
+        private readonly IUserService userService;
+        private readonly IRoleService roleService;
+
+        public UsersController(IUserService userService, IRoleService roleService)
+        {
+            this.userService = userService;
+            this.roleService = roleService;
+        }
+
         public IActionResult Index()
         {
-            IndexViewModel model = new IndexViewModel
+            AdminUsersIndexViewModel model = new AdminUsersIndexViewModel
             {
-                Users = new UserViewModel[]
-                {
-                    new UserViewModel
-                    {
-                        Id = "1",
-                        Username = "user1",
-                        Email = "email1",
-                        Roles = new string[0],
-                    },
-                    new UserViewModel
-                    {
-                        Id = "2",
-                        Username = "user2",
-                        Email = "email2",
-                        Roles = new string[] { "Admin" },
-                    },
-                },
+                Users = this.userService.All<UserViewModel>(),
             };
+
+            foreach (var user in model.Users)
+            {
+                user.RoleNames = this.roleService.GetRoleNamesByIds(user.RoleIds);
+            }
 
             return this.View(model);
         }
 
-        public IActionResult Promote(string id)
+        public async Task<IActionResult> Promote(string id)
         {
-            return this.Content(id);
+            await this.userService.AddAdministratorRoleAsync(id);
+
+            return this.RedirectToIndex();
         }
 
-        public IActionResult Demote(string id)
+        public async Task<IActionResult> Demote(string id)
         {
-            return this.Content(id);
+            bool exists = await this.userService.Exists(id);
+
+            if (!exists)
+            {
+                return this.RedirectToIndex();
+            }
+
+            UserViewModel user = await this.userService.FindByIdAsync<UserViewModel>(id);
+
+            bool isRootAdmin = user.Username == GlobalConstants.RootAdministratorUsername
+                && user.Email == GlobalConstants.RootAdministratorEmail;
+
+            if (isRootAdmin)
+            {
+                return this.RedirectToIndex();
+            }
+
+            await this.userService.RemoveAdministratorRoleAsync(id);
+
+            return this.RedirectToIndex();
         }
+
+        private IActionResult RedirectToIndex()
+            => this.RedirectToAction(nameof(this.Index));
     }
 }

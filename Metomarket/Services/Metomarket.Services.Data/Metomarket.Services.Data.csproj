@@ -21,6 +21,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Metomarket.Data.Common\Metomarket.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Metomarket.Data.Models\Metomarket.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Metomarket.Common\Metomarket.Common.csproj" />
+    <ProjectReference Include="..\Metomarket.Services.Mapping\Metomarket.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

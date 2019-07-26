@@ -1,6 +1,6 @@
-﻿@model Metomarket.Web.Areas.Administration.ViewModels.Users.IndexViewModel
+﻿@model Metomarket.Web.ViewModels.Users.AdminUsersIndexViewModel
 @using Metomarket.Common
-@inject Microsoft.AspNetCore.Identity.UserManager<Metomarket.Data.Models.ApplicationUser> UserManager
+@using System.Security.Claims
 
 @{
     ViewData["Title"] = "Users";
@@ -18,9 +18,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var user in Model.Users.Where(u => u.Id != UserManager.GetUserId(this.User)))
+                @foreach (var user in Model.Users.Where(u => u.Id != this.User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 {
-                    bool isAdmin = user.Roles.Contains(GlobalConstants.AdministratorRoleName);
+                    bool isAdmin = user.RoleNames.Contains(GlobalConstants.AdministratorRoleName);
 
                     <tr>
                         <td>@user.Username</td>

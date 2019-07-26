@@ -108,7 +108,8 @@ namespace Metomarket.Web
             services.AddTransient<IEmailSender, NullMessageSender>();
             //services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
