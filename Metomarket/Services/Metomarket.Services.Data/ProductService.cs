@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using AutoMapper;
 
 using Metomarket.Data.Common.Repositories;
 using Metomarket.Data.Models;
@@ -58,6 +57,23 @@ namespace Metomarket.Services.Data
             return true;
         }
 
+        public async Task<bool> Delete(string id)
+        {
+            Product product = this.productRepository.All()
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            this.productRepository.Delete(product);
+            await this.productRepository.SaveChangesAsync();
+
+            return true;
+        }
+
         public bool Exists(string id)
         {
             bool productExists = this.productRepository.All()
@@ -75,6 +91,32 @@ namespace Metomarket.Services.Data
                 .FirstOrDefault();
 
             return model;
+        }
+
+        public async Task<bool> Update(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd)
+        {
+            Product product = this.productRepository.All()
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            product.Name = newName;
+            product.Price = newPrice;
+            product.ImageUrl = newImageUrl;
+            product.InStock = Math.Max(
+                product.InStock,
+                Math.Max(
+                    product.InStock + quantityToAdd,
+                    Math.Min(quantityToAdd, int.MaxValue)));
+
+            this.productRepository.Update(product);
+            await this.productRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

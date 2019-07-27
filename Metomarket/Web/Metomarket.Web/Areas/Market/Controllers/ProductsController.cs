@@ -41,15 +41,13 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
         public IActionResult Details(string id)
         {
-            bool exists = this.productService.Exists(id);
+            ProductDetailsViewModel model = this.productService
+                .FindById<ProductDetailsViewModel>(id);
 
-            if (!exists)
+            if (model == null)
             {
                 return this.RedirectToHome();
             }
-
-            ProductDetailsViewModel model = this.productService
-                .FindById<ProductDetailsViewModel>(id);
 
             return this.View(model);
         }
@@ -57,29 +55,43 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult Edit(string id)
         {
-            bool exists = this.productService.Exists(id);
+            ProductEditModel model = this.productService.FindById<ProductEditModel>(id);
 
-            if (!exists)
+            if (model == null)
             {
                 return this.RedirectToHome();
             }
-
-            ProductEditModel model = this.productService.FindById<ProductEditModel>(id);
 
             return this.View(model);
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         [HttpPost]
-        public IActionResult Edit(ProductEditModel model)
+        public async Task<IActionResult> Edit(ProductEditModel model)
         {
-            return this.Content($"{model.Name}, {model.Price}, {model.ImageUrl}, {model.QuantityToAdd}");
+            bool exists = this.productService.Exists(model.Id);
+
+            if (!exists)
+            {
+                return this.RedirectToHome();
+            }
+
+            await this.productService.Update(
+                model.Id,
+                model.Name,
+                model.Price,
+                model.ImageUrl,
+                model.QuantityToAdd);
+
+            return this.RedirectToAction(nameof(this.Details), new { id = model.Id });
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            return this.Content(id);
+            await this.productService.Delete(id);
+
+            return this.RedirectToHome();
         }
 
         [Authorize]

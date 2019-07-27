@@ -12,5 +12,9 @@ namespace Metomarket.Services.Data
         TModel FindById<TModel>(string id);
 
         IEnumerable<TModel> All<TModel>();
+
+        Task<bool> Update(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd);
+
+        Task<bool> Delete(string id);
     }
 }
