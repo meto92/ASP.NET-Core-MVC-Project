@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 using Metomarket.Common;
+using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
 
 namespace Metomarket.Web.ViewModels.Products
 {
-    public class ProductEditModel
+    public class ProductEditModel : IMapFrom<Product>
     {
         private const int NameMinLength = GlobalConstants.ProductNameMinLength;
         private const int NameMaxLength = GlobalConstants.ProductNameMaxLength;
@@ -22,7 +24,7 @@ namespace Metomarket.Web.ViewModels.Products
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string Name { get; set; }
 
-        public string Type { get; set; }
+        public string TypeName { get; set; }
 
         [Range(typeof(decimal), PriceMinValue, PriceMaxValue)]
         public decimal Price { get; set; }

@@ -41,15 +41,15 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
         public IActionResult Details(string id)
         {
-            ProductDetailsViewModel model = new ProductDetailsViewModel
+            bool exists = this.productService.Exists(id);
+
+            if (!exists)
             {
-                Id = "2",
-                ImageUrl = "https://i5.walmartimages.ca/images/Enlarge/010/121/6000199010121.jpg",
-                Price = 2500.99m,
-                Name = "TV name",
-                Type = "TV",
-                InStock = 0,
-            };
+                return this.RedirectToHome();
+            }
+
+            ProductDetailsViewModel model = this.productService
+                .FindById<ProductDetailsViewModel>(id);
 
             return this.View(model);
         }
@@ -57,15 +57,14 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public IActionResult Edit(string id)
         {
-            ProductEditModel model = new ProductEditModel
+            bool exists = this.productService.Exists(id);
+
+            if (!exists)
             {
-                Id = "2",
-                ImageUrl = "https://i5.walmartimages.ca/images/Enlarge/010/121/6000199010121.jpg",
-                Price = 2500.99m,
-                Name = "TV name",
-                Type = "TV",
-                InStock = 0,
-            };
+                return this.RedirectToHome();
+            }
+
+            ProductEditModel model = this.productService.FindById<ProductEditModel>(id);
 
             return this.View(model);
         }

@@ -2,14 +2,10 @@
 @using Metomarket.Common
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Product Details";
 }
 
-@{ 
-    Model.InStock = 1000;
-}
-
-<h1 class="text-center">Product Details</h1>
+<h1 class="text-center">@this.ViewData["Title"]</h1>
 
 <section>
     <div class="row mt-4">
@@ -18,7 +14,7 @@
         </div>
         <div class="col d-flex flex-column mt-4 mt-md-0 text-center text-md-left bg-dark text-white py-3 rounded">
             <p><span class="font-weight-bold">Product:</span> @Model.Name</p>
-            <p><span class="font-weight-bold">Type:</span> @Model.Type</p>
+            <p><span class="font-weight-bold">Type:</span> @Model.TypeName</p>
             <p><span class="font-weight-bold">Price:</span> $@($"{Model.Price:f2}")</p>
             <p><span class="font-weight-bold">In stock:</span> <span class="@(Model.InStock == 0 ? "text-danger" : string.Empty)">@Model.InStock</span></p>
 
@@ -29,7 +25,7 @@
                     {
                         <form asp-action="InitializeOrder" class="d-inline-block mr-2">
                             <input type="hidden" name="productId" value="@Model.Id" />
-                            <button type="submit" class="btn btn-primary">Create Order</button>
+                            <button type="submit" class="btn btn-primary mt-2">Create Order</button>
                         </form>
                     }
 

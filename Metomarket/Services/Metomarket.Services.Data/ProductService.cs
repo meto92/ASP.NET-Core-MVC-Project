@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+
+using AutoMapper;
 
 using Metomarket.Data.Common.Repositories;
 using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
 
 namespace Metomarket.Services.Data
 {
@@ -17,6 +21,15 @@ namespace Metomarket.Services.Data
         {
             this.productRepository = productRepository;
             this.productTypeRepository = productTypeRepository;
+        }
+
+        public IEnumerable<TModel> All<TModel>()
+        {
+            IEnumerable<TModel> models = this.productRepository.AllAsNoTracking()
+                .To<TModel>()
+                .ToArray();
+
+            return models;
         }
 
         public async Task<bool> CreateAsync(string name, decimal price, string imageUrl, int inStock, string typeId)
@@ -43,6 +56,25 @@ namespace Metomarket.Services.Data
             await this.productRepository.SaveChangesAsync();
 
             return true;
+        }
+
+        public bool Exists(string id)
+        {
+            bool productExists = this.productRepository.All()
+                .Where(product => product.Id == id)
+                .FirstOrDefault() != null;
+
+            return productExists;
+        }
+
+        public TModel FindById<TModel>(string id)
+        {
+            TModel model = this.productRepository.All()
+                .Where(p => p.Id == id)
+                .To<TModel>()
+                .FirstOrDefault();
+
+            return model;
         }
     }
 }

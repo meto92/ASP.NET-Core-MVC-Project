@@ -42,9 +42,11 @@ namespace Metomarket.Services.Data
 
         public bool Exists(string name)
         {
-            return this.productTypeRepository.AllAsNoTracking()
+            bool productTypeExists = this.productTypeRepository.AllAsNoTracking()
                 .Where(pt => pt.Name == name)
                 .FirstOrDefault() != null;
+
+            return productTypeExists;
         }
     }
 }
