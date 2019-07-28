@@ -5,7 +5,7 @@ namespace Metomarket.Services.Data
 {
     public interface IUserService
     {
-        Task<bool> Exists(string userId);
+        Task<bool> ExistsAsync(string userId);
 
         Task<bool> AddAdministratorRoleAsync(string userId);
 

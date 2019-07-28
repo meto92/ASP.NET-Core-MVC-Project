@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Metomarket.Web.ViewModels.ShoppingCart
+namespace Metomarket.Web.ViewModels.ShoppingCarts
 {
     public class CompleteOrdersModel : IValidatableObject
     {

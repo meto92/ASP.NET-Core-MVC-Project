@@ -13,7 +13,7 @@ namespace Metomarket.Services.Data
 
         IEnumerable<TModel> All<TModel>();
 
-        Task<bool> Update(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd);
+        Task<bool> UpdateAsync(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd);
 
         Task<bool> Delete(string id);
     }

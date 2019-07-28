@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
 using Metomarket.Web.ViewModels.Orders;
 
 namespace Metomarket.Web.ViewModels.Products
 {
-    public class ProductCreateOrderViewModel
+    public class ProductCreateOrderViewModel : IMapFrom<Product>
     {
         private const string NameDisplayName = "Product Name";
 

@@ -11,6 +11,9 @@ namespace Metomarket.Services.Data
 {
     public class ProductService : IProductService
     {
+        private const string ProductNotFoundMessage = "Product with id {0} could not be found.";
+        private const string ProductTypeNotFoundMessage = "Product type with id {0} could not be found.";
+
         private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly IRepository<ProductType> productTypeRepository;
 
@@ -34,12 +37,14 @@ namespace Metomarket.Services.Data
         public async Task<bool> CreateAsync(string name, decimal price, string imageUrl, int inStock, string typeId)
         {
             bool productTypeExists = this.productTypeRepository.All()
-                .Where(pt => pt.Id == typeId)
+                .Where(productType => productType.Id == typeId)
                 .FirstOrDefault() != null;
 
             if (!productTypeExists)
             {
-                return false;
+                throw new ServiceException(string.Format(
+                    ProductTypeNotFoundMessage,
+                    typeId));
             }
 
             Product product = new Product
@@ -64,6 +69,13 @@ namespace Metomarket.Services.Data
                 .FirstOrDefault();
 
             if (product == null)
+            {
+                throw new ServiceException(string.Format(
+                    ProductNotFoundMessage,
+                    id));
+            }
+
+            if (product.IsDeleted)
             {
                 return false;
             }
@@ -90,16 +102,33 @@ namespace Metomarket.Services.Data
                 .To<TModel>()
                 .FirstOrDefault();
 
+            if (model == null)
+            {
+                throw new ServiceException(string.Format(
+                    ProductNotFoundMessage,
+                    id));
+            }
+
             return model;
         }
 
-        public async Task<bool> Update(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd)
+        public async Task<bool> UpdateAsync(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd)
         {
             Product product = this.productRepository.All()
                 .Where(p => p.Id == id)
                 .FirstOrDefault();
 
             if (product == null)
+            {
+                throw new ServiceException(string.Format(
+                    ProductNotFoundMessage,
+                    id));
+            }
+
+            if (product.Name == newName
+                && product.Price == newPrice
+                && product.ImageUrl == newImageUrl
+                && quantityToAdd == 0)
             {
                 return false;
             }

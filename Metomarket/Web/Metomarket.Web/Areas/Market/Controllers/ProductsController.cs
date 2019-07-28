@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 
 using Metomarket.Common;
+using Metomarket.Data.Models;
 using Metomarket.Services.Data;
 using Metomarket.Web.ViewModels.Orders;
 using Metomarket.Web.ViewModels.Products;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Metomarket.Web.Areas.Market.Controllers
@@ -13,10 +15,20 @@ namespace Metomarket.Web.Areas.Market.Controllers
     public class ProductsController : MarketController
     {
         private readonly IProductService productService;
+        private readonly IOrderService orderService;
+        private readonly IShoppingCartService shoppingCartService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(
+            IProductService productService,
+            IOrderService orderService,
+            IShoppingCartService shoppingCartService,
+            UserManager<ApplicationUser> userManager)
         {
             this.productService = productService;
+            this.orderService = orderService;
+            this.shoppingCartService = shoppingCartService;
+            this.userManager = userManager;
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
@@ -34,20 +46,20 @@ namespace Metomarket.Web.Areas.Market.Controllers
                 return this.View(model);
             }
 
-            await this.productService.CreateAsync(model.Name, model.Price, model.ImageUrl, model.InStock, model.TypeId);
+            await this.productService.CreateAsync(
+                model.Name,
+                model.Price,
+                model.ImageUrl,
+                model.InStock,
+                model.TypeId);
 
-            return this.Redirect("/");
+            return this.RedirectToHome();
         }
 
         public IActionResult Details(string id)
         {
             ProductDetailsViewModel model = this.productService
                 .FindById<ProductDetailsViewModel>(id);
-
-            if (model == null)
-            {
-                return this.RedirectToHome();
-            }
 
             return this.View(model);
         }
@@ -57,11 +69,6 @@ namespace Metomarket.Web.Areas.Market.Controllers
         {
             ProductEditModel model = this.productService.FindById<ProductEditModel>(id);
 
-            if (model == null)
-            {
-                return this.RedirectToHome();
-            }
-
             return this.View(model);
         }
 
@@ -69,14 +76,7 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ProductEditModel model)
         {
-            bool exists = this.productService.Exists(model.Id);
-
-            if (!exists)
-            {
-                return this.RedirectToHome();
-            }
-
-            await this.productService.Update(
+            await this.productService.UpdateAsync(
                 model.Id,
                 model.Name,
                 model.Price,
@@ -104,19 +104,28 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [Authorize]
         public IActionResult CreateOrder(string id)
         {
-            return this.View(new ProductCreateOrderViewModel
-            {
-                Id = "2",
-                Price = 2500.99m,
-                Name = "TV name",
-            });
+            ProductCreateOrderViewModel model = this.productService.FindById<ProductCreateOrderViewModel>(id);
+
+            return this.View(model);
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult CreateOrder(OrderCreateInputModel model)
+        public async Task<IActionResult> CreateOrder(OrderCreateInputModel model)
         {
-            return this.Content($"{model.ProductId}, {model.Quantity}");
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(
+                    nameof(this.CreateOrder),
+                    new { id = model.ProductId });
+            }
+
+            string userId = this.userManager.GetUserId(this.User);
+            string orderId = await this.orderService.CreateAsync(model.ProductId, userId, model.Quantity);
+
+            await this.shoppingCartService.AddOrderAsync(userId, orderId);
+
+            return this.RedirectToHome();
         }
     }
 }

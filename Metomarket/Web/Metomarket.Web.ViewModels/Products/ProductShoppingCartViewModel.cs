@@ -1,6 +1,9 @@
-﻿namespace Metomarket.Web.ViewModels.Products
+﻿using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
+
+namespace Metomarket.Web.ViewModels.Products
 {
-    public class ProductShoppingCartViewModel
+    public class ProductShoppingCartViewModel : IMapFrom<Product>
     {
         public string Name { get; set; }
 

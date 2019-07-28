@@ -27,6 +27,7 @@ namespace Metomarket.Data.Seeding
                 UserName = GlobalConstants.RootAdministratorUsername,
                 Email = GlobalConstants.RootAdministratorEmail,
                 EmailConfirmed = true,
+                Address = GlobalConstants.RootAdministratorAddress,
             };
 
             RootAdministratorOptions rootAdministratorOptions = serviceProvider.GetRequiredService<IOptions<RootAdministratorOptions>>().Value;

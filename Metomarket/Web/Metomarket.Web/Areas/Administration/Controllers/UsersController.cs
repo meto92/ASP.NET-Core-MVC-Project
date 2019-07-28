@@ -43,7 +43,7 @@ namespace Metomarket.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Demote(string id)
         {
-            bool exists = await this.userService.Exists(id);
+            bool exists = await this.userService.ExistsAsync(id);
 
             if (!exists)
             {

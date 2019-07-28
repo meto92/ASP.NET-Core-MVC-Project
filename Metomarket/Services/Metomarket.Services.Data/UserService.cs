@@ -21,7 +21,7 @@ namespace Metomarket.Services.Data
             this.userManager = userManager;
         }
 
-        public async Task<bool> Exists(string userId)
+        public async Task<bool> ExistsAsync(string userId)
         {
             bool exists = await this.userManager.FindByIdAsync(userId) != null;
 
