@@ -11,6 +11,7 @@ using Metomarket.Services.Mapping;
 using Metomarket.Services.Messaging;
 using Metomarket.Services.Messaging.SendGrid;
 using Metomarket.Web.Infrastructure.ComponentViewModels.ProductTypes;
+using Metomarket.Web.Infrastructure.Filters;
 using Metomarket.Web.ViewModels;
 
 using Microsoft.AspNetCore.Builder;
@@ -63,7 +64,7 @@ namespace Metomarket.Web
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
             services
-                .AddMvc()
+                .AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {
@@ -113,6 +114,8 @@ namespace Metomarket.Web
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IProductTypeService, ProductTypeService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
