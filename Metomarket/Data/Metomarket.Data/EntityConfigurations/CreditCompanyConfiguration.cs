@@ -1,4 +1,5 @@
-﻿using Metomarket.Data.Models;
+﻿using Metomarket.Common;
+using Metomarket.Data.Models;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,7 +11,7 @@ namespace Metomarket.Data.EntityConfigurations
         public void Configure(EntityTypeBuilder<CreditCompany> builder)
         {
             builder.Property(creditCompany => creditCompany.Name)
-                .HasMaxLength(1)
+                .HasMaxLength(GlobalConstants.CreditCompanyNameMaxLength)
                 .IsRequired();
         }
     }

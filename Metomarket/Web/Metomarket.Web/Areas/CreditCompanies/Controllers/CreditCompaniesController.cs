@@ -22,6 +22,17 @@ namespace Metomarket.Web.Areas.CreditCompanies.Controllers
             this.creditCompanyService = creditCompanyService;
         }
 
+        public IActionResult Index()
+        {
+            CreditCompaniesListIndexViewModel model = new CreditCompaniesListIndexViewModel
+            {
+                CreditCompanies = this.creditCompanyService
+                .All<CreditCompanyIndexViewModel>(),
+            };
+
+            return this.View(model);
+        }
+
         public IActionResult Add()
         {
             return this.View(new CreditCompanyCreateInputModel());
@@ -39,7 +50,7 @@ namespace Metomarket.Web.Areas.CreditCompanies.Controllers
                 model.Name,
                 model.ActiveSincce);
 
-            return this.View();
+            return this.RedirectToAction(nameof(this.Index));
         }
     }
 }

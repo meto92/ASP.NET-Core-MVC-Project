@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Metomarket.Data.Common.Repositories;
 using Metomarket.Data.Models;
+using Metomarket.Services.Mapping;
 
 namespace Metomarket.Services.Data
 {
@@ -13,6 +16,15 @@ namespace Metomarket.Services.Data
         public CreditCompanyService(IRepository<CreditCompany> creditCompanyRepository)
         {
             this.creditCompanyRepository = creditCompanyRepository;
+        }
+
+        public IEnumerable<TModel> All<TModel>()
+        {
+            IEnumerable<TModel> models = this.creditCompanyRepository.AllAsNoTracking()
+                .To<TModel>()
+                .ToArray();
+
+            return models;
         }
 
         public async Task<bool> CreateAsync(string name, DateTime activeSince)
