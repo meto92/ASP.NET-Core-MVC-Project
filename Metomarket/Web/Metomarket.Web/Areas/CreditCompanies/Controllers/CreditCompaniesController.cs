@@ -1,4 +1,7 @@
-﻿using Metomarket.Common;
+﻿using System.Threading.Tasks;
+
+using Metomarket.Common;
+using Metomarket.Services.Data;
 using Metomarket.Web.Controllers;
 using Metomarket.Web.ViewModels.CreditCompanies;
 
@@ -12,18 +15,29 @@ namespace Metomarket.Web.Areas.CreditCompanies.Controllers
     [Route("{area}/{action}/{id?}")]
     public class CreditCompaniesController : BaseController
     {
-        public IActionResult Create()
+        private readonly ICreditCompanyService creditCompanyService;
+
+        public CreditCompaniesController(ICreditCompanyService creditCompanyService)
+        {
+            this.creditCompanyService = creditCompanyService;
+        }
+
+        public IActionResult Add()
         {
             return this.View(new CreditCompanyCreateInputModel());
         }
 
         [HttpPost]
-        public IActionResult Create(CreditCompanyCreateInputModel model)
+        public async Task<IActionResult> Add(CreditCompanyCreateInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
+
+            await this.creditCompanyService.CreateAsync(
+                model.Name,
+                model.ActiveSincce);
 
             return this.View();
         }
