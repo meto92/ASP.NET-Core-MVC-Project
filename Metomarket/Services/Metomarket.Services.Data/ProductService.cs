@@ -13,6 +13,7 @@ namespace Metomarket.Services.Data
     {
         private const string ProductNotFoundMessage = "Product with id {0} could not be found.";
         private const string ProductTypeNotFoundMessage = "Product type with id {0} could not be found.";
+        private const string InsufficientProductQuantityMessage = "Sorry. We don't have the requested quantity.";
 
         private readonly IDeletableEntityRepository<Product> productRepository;
         private readonly IRepository<ProductType> productTypeRepository;
@@ -23,6 +24,25 @@ namespace Metomarket.Services.Data
         {
             this.productRepository = productRepository;
             this.productTypeRepository = productTypeRepository;
+        }
+
+        public async Task<bool> AddQuantityAsync(string id, int quantity)
+        {
+            Product product = this.productRepository.All()
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                this.ThrowWithNotFoundMessage(id);
+            }
+
+            product.InStock = this.GetNewQuantity(product.InStock, quantity);
+
+            this.productRepository.Update(product);
+            await this.productRepository.SaveChangesAsync();
+
+            return true;
         }
 
         public IEnumerable<TModel> All<TModel>()
@@ -70,9 +90,7 @@ namespace Metomarket.Services.Data
 
             if (product == null)
             {
-                throw new ServiceException(string.Format(
-                    ProductNotFoundMessage,
-                    id));
+                this.ThrowWithNotFoundMessage(id);
             }
 
             if (product.IsDeleted)
@@ -104,12 +122,34 @@ namespace Metomarket.Services.Data
 
             if (model == null)
             {
-                throw new ServiceException(string.Format(
-                    ProductNotFoundMessage,
-                    id));
+                this.ThrowWithNotFoundMessage(id);
             }
 
             return model;
+        }
+
+        public async Task<bool> ReduceQuantityAsync(string id, int quantity)
+        {
+            Product product = this.productRepository.All()
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                this.ThrowWithNotFoundMessage(id);
+            }
+
+            if (product.InStock < quantity)
+            {
+                throw new ServiceException(InsufficientProductQuantityMessage);
+            }
+
+            product.InStock -= quantity;
+
+            this.productRepository.Update(product);
+            await this.productRepository.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> UpdateAsync(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd)
@@ -120,9 +160,7 @@ namespace Metomarket.Services.Data
 
             if (product == null)
             {
-                throw new ServiceException(string.Format(
-                    ProductNotFoundMessage,
-                    id));
+                this.ThrowWithNotFoundMessage(id);
             }
 
             if (product.Name == newName
@@ -136,16 +174,30 @@ namespace Metomarket.Services.Data
             product.Name = newName;
             product.Price = newPrice;
             product.ImageUrl = newImageUrl;
-            product.InStock = Math.Max(
-                product.InStock,
-                Math.Max(
-                    product.InStock + quantityToAdd,
-                    Math.Min(quantityToAdd, int.MaxValue)));
+            product.InStock = this.GetNewQuantity(product.InStock, quantityToAdd);
 
             this.productRepository.Update(product);
             await this.productRepository.SaveChangesAsync();
 
             return true;
+        }
+
+        private int GetNewQuantity(int inStock, int quantityToAdd)
+        {
+            int result = Math.Max(
+                inStock,
+                Math.Max(
+                    inStock + quantityToAdd,
+                    Math.Min(quantityToAdd, int.MaxValue)));
+
+            return result;
+        }
+
+        private void ThrowWithNotFoundMessage(string id)
+        {
+            throw new ServiceException(string.Format(
+                ProductNotFoundMessage,
+                id));
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Metomarket.Services.Data
 {
     public class ShoppingCartService : IShoppingCartService
     {
+        private const string OrderNotFoundMessage = "Order not found.";
+
         private readonly IRepository<ShoppingCart> shoppingCartRepository;
         private readonly IRepository<Order> orderRepository;
 
@@ -28,9 +30,7 @@ namespace Metomarket.Services.Data
 
             if (shoppingCart == null)
             {
-                return false;
-
-                // TODO: throw exception
+                throw new ServiceException();
             }
 
             Order order = this.orderRepository.All()
@@ -39,9 +39,7 @@ namespace Metomarket.Services.Data
 
             if (order == null)
             {
-                return false;
-
-                // TODO: throw exception
+                throw new ServiceException(OrderNotFoundMessage);
             }
 
             shoppingCart.Orders.Add(order);

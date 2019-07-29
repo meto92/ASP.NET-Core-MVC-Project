@@ -16,5 +16,9 @@ namespace Metomarket.Services.Data
         Task<bool> UpdateAsync(string id, string newName, decimal newPrice, string newImageUrl, int quantityToAdd);
 
         Task<bool> Delete(string id);
+
+        Task<bool> ReduceQuantityAsync(string id, int quantity);
+
+        Task<bool> AddQuantityAsync(string id, int quantity);
     }
 }

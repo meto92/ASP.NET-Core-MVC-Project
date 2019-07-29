@@ -1,4 +1,6 @@
-﻿using Metomarket.Data.Models;
+﻿using System.Threading.Tasks;
+
+using Metomarket.Data.Models;
 using Metomarket.Services.Data;
 using Metomarket.Web.ViewModels.ShoppingCarts;
 
@@ -12,13 +14,16 @@ namespace Metomarket.Web.Areas.Market.Controllers
     public class ShoppingCartController : MarketController
     {
         private readonly IShoppingCartService shoppingCartService;
+        private readonly IOrderService orderService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ShoppingCartController(
             IShoppingCartService shoppingCartService,
+            IOrderService orderService,
             UserManager<ApplicationUser> userManager)
         {
             this.shoppingCartService = shoppingCartService;
+            this.orderService = orderService;
             this.userManager = userManager;
         }
 
@@ -32,9 +37,13 @@ namespace Metomarket.Web.Areas.Market.Controllers
             return this.View(model);
         }
 
-        public IActionResult DeleteOrder(string id)
+        public async Task<IActionResult> DeleteOrder(string id)
         {
-            return this.Content(id);
+            string userId = this.userManager.GetUserId(this.User);
+
+            await this.orderService.DeleteAsync(id, userId);
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         public IActionResult CompleteOrders()

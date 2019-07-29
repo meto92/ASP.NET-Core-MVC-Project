@@ -9,20 +9,20 @@ namespace Metomarket.Services.Data
     public class OrderService : IOrderService
     {
         private const string InvalidQuantityMessage = "Quantity must be greater than zero.";
-        private const string ProductNotFoundMessage = "Product not found.";
-        private const string InsufficientProductQuantityMessage = "Sorry. We don't have the requested quantity.";
+        private const string OrderNotFoundMessage = "Order with id {0} could not be found.";
+        private const string UnauthorizedToDeleteOrderMessage = "You don't have permission to delete this order.";
 
         private readonly IDeletableEntityRepository<Order> orderRepository;
-        private readonly IDeletableEntityRepository<Product> productRepository;
+        private readonly IProductService productService;
         private readonly IUserService userService;
 
         public OrderService(
             IDeletableEntityRepository<Order> orderRepository,
-            IDeletableEntityRepository<Product> poductRepository,
+            IProductService productService,
             IUserService userService)
         {
             this.orderRepository = orderRepository;
-            this.productRepository = poductRepository;
+            this.productService = productService;
             this.userService = userService;
         }
 
@@ -33,15 +33,6 @@ namespace Metomarket.Services.Data
                 throw new ServiceException(InvalidQuantityMessage);
             }
 
-            Product product = this.productRepository.All()
-                .Where(p => p.Id == productId)
-                .FirstOrDefault();
-
-            if (product == null)
-            {
-                throw new ServiceException(ProductNotFoundMessage);
-            }
-
             bool userExists = await this.userService.ExistsAsync(issuerId);
 
             if (!userExists)
@@ -49,10 +40,7 @@ namespace Metomarket.Services.Data
                 throw new ServiceException();
             }
 
-            if (product.InStock < quantity)
-            {
-                throw new ServiceException(InsufficientProductQuantityMessage);
-            }
+            await this.productService.ReduceQuantityAsync(productId, quantity);
 
             Order order = new Order
             {
@@ -61,13 +49,38 @@ namespace Metomarket.Services.Data
                 IssuerId = issuerId,
             };
 
-            product.InStock -= quantity;
-
-            this.productRepository.Update(product);
             await this.orderRepository.AddAsync(order);
             await this.orderRepository.SaveChangesAsync();
 
             return order.Id;
+        }
+
+        public async Task<bool> DeleteAsync(string id, string userId)
+        {
+            Order order = this.orderRepository.All()
+                .Where(o => o.Id == id)
+                .FirstOrDefault();
+
+            if (order == null)
+            {
+                throw new ServiceException(string.Format(
+                    OrderNotFoundMessage,
+                    id));
+            }
+
+            bool isAdmin = await this.userService.IsAdminAsync(userId);
+
+            if (order.IssuerId != userId && !isAdmin)
+            {
+                throw new ServiceException(UnauthorizedToDeleteOrderMessage);
+            }
+
+            await this.productService.AddQuantityAsync(order.ProductId, order.Quantity);
+
+            this.orderRepository.Delete(order);
+            await this.orderRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

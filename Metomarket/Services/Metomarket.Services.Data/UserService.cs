@@ -14,6 +14,8 @@ namespace Metomarket.Services.Data
 {
     public class UserService : IUserService
     {
+        private const string UserNotFoundMessage = "User with id {0} could not be found.";
+
         private readonly UserManager<ApplicationUser> userManager;
 
         public UserService(UserManager<ApplicationUser> userManager)
@@ -75,5 +77,22 @@ namespace Metomarket.Services.Data
 
         public async Task<TModel> FindByIdAsync<TModel>(string userId)
             => Mapper.Map<TModel>(await this.userManager.FindByIdAsync(userId));
+
+        public async Task<bool> IsAdminAsync(string userId)
+        {
+            ApplicationUser user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new ServiceException(string.Format(
+                    UserNotFoundMessage,
+                    userId));
+            }
+
+            bool isAdmin = await this.userManager
+                .IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
+
+            return isAdmin;
+        }
     }
 }
