@@ -275,6 +275,20 @@ body {
       content: "Products Count:"; } }
 
 @media screen and (max-width: 767px) {
+  .credit-companies-index table > thead {
+    display: none; }
+  .credit-companies-index table td {
+    display: block;
+    width: 100%; }
+    .credit-companies-index table td::before {
+      padding-right: 1em;
+      font-weight: bold; }
+    .credit-companies-index table td:nth-child(2n - 1)::before {
+      content: "Company Name:"; }
+    .credit-companies-index table td:nth-child(2n)::before {
+      content: "Contracts Count:"; } }
+
+@media screen and (max-width: 767px) {
   .admin-users-index table > thead {
     display: none; }
   .admin-users-index table td {

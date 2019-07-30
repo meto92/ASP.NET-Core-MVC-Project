@@ -1,0 +1,25 @@
+﻿.credit-companies-index {
+    @include mq-max-w ($breakpoint-md - 1px) {
+        table > thead {
+            display: none;
+        }
+
+        table td {
+            display: block;
+            width: 100%;
+
+            &::before {
+                padding-right: 1em;
+                font-weight: bold;
+            }
+
+            &:nth-child(2n - 1)::before {
+                content: "Company Name:";
+            }
+
+            &:nth-child(2n)::before {
+                content: "Contracts Count:";
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Metomarket.Services.Data
 {
@@ -7,5 +8,7 @@ namespace Metomarket.Services.Data
         Task<string> CreateAsync(string productId, string issuerId, int quantity);
 
         Task<bool> DeleteAsync(string id, string userId);
+
+        Task<bool> CompleteOrdersAsync(IEnumerable<string> ids);
     }
 }

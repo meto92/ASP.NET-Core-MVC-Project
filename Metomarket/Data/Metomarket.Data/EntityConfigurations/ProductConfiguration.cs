@@ -17,6 +17,11 @@ namespace Metomarket.Data.EntityConfigurations
             builder.Property(product => product.ImageUrl)
                 .HasMaxLength(GlobalConstants.ProductImageUrlMaxLength)
                 .IsRequired();
+
+            builder.HasOne(product => product.Type)
+                .WithMany(type => type.Products)
+                .HasForeignKey(product => product.TypeId)
+                .IsRequired();
         }
     }
 }

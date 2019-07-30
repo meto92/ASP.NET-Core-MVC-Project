@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Metomarket.Web.Infrastructure.ComponentViewModels.CreditCompanies.CreditCompanyOptionViewModel>
+
+@foreach (var creditCompany in Model)
+{
+    <option value="@creditCompany.Id">@creditCompany.Name</option>
+}

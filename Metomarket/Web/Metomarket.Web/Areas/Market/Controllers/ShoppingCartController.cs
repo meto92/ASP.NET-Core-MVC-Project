@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Metomarket.Data.Models;
 using Metomarket.Services.Data;
@@ -15,21 +17,24 @@ namespace Metomarket.Web.Areas.Market.Controllers
     {
         private readonly IShoppingCartService shoppingCartService;
         private readonly IOrderService orderService;
+        private readonly IContractService contractService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ShoppingCartController(
             IShoppingCartService shoppingCartService,
             IOrderService orderService,
+            IContractService contractService,
             UserManager<ApplicationUser> userManager)
         {
             this.shoppingCartService = shoppingCartService;
             this.orderService = orderService;
+            this.contractService = contractService;
             this.userManager = userManager;
         }
 
         public IActionResult Index()
         {
-            string userId = this.userManager.GetUserId(this.User);
+            string userId = this.GetUserId();
 
             ShoppingCartViewModel model = this.shoppingCartService
                 .FindByUserId<ShoppingCartViewModel>(userId);
@@ -39,7 +44,7 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
         public async Task<IActionResult> DeleteOrder(string id)
         {
-            string userId = this.userManager.GetUserId(this.User);
+            string userId = this.GetUserId();
 
             await this.orderService.DeleteAsync(id, userId);
 
@@ -48,10 +53,15 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
         public IActionResult CompleteOrders()
         {
+            string userId = this.GetUserId();
+
+            ShoppingCartViewModel shoppingCartData = this.shoppingCartService
+                .FindByUserId<ShoppingCartViewModel>(userId);
+
             CompleteOrdersModel model = new CompleteOrdersModel
             {
-                Total = 1234.567m,
-                OrdersCount = 4,
+                Total = shoppingCartData.Total,
+                OrdersCount = shoppingCartData.Orders.Count(),
             };
 
             if (model.OrdersCount == 0)
@@ -63,20 +73,50 @@ namespace Metomarket.Web.Areas.Market.Controllers
         }
 
         [HttpPost]
-        public IActionResult CompleteOrders(CompleteOrdersModel model)
+        public async Task<IActionResult> CompleteOrders(CompleteOrdersModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToAction(nameof(this.CompleteOrders));
             }
 
-            return this.Content($"id: {model.CreditCompanyId}, card number:{model.CreditCardNumber}, period: {model.PeriodInMonths}");
+            string userId = this.GetUserId();
+
+            ShoppingCartViewModel shoppingCartData = this.shoppingCartService
+                .FindByUserId<ShoppingCartViewModel>(userId);
+
+            IEnumerable<string> orderIds = shoppingCartData.Orders
+                .Select(order => order.Id);
+
+            await this.contractService.CreateAsync(
+                userId,
+                model.CreditCompanyId,
+                orderIds,
+                shoppingCartData.Total,
+                model.CreditCardNumber,
+                model.PeriodInMonths);
+
+            await this.orderService.CompleteOrdersAsync(orderIds);
+            await this.shoppingCartService.EmptyCartAsync(userId);
+
+            return this.RedirectToHome();
         }
 
         [HttpPost]
-        public IActionResult EmptyCart()
+        public async Task<IActionResult> EmptyCart()
         {
-            throw new System.Exception();
+            string userId = this.GetUserId();
+
+            await this.shoppingCartService.EmptyCartAsync(userId);
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        private string GetUserId()
+        {
+            string userId = this.userManager.GetUserId(this.User);
+
+            return userId;
         }
     }
 }

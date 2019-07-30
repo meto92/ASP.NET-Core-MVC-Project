@@ -117,6 +117,7 @@ namespace Metomarket.Web
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IShoppingCartService, ShoppingCartService>();
             services.AddTransient<ICreditCompanyService, CreditCompanyService>();
+            services.AddTransient<IContractService, ContractService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

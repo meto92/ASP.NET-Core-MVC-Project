@@ -98,6 +98,8 @@ namespace Metomarket.Data
             ApplyConfiguration<Product, ProductConfiguration>();
             ApplyConfiguration<ProductType, ProductTypeConfiguration>();
             ApplyConfiguration<CreditCompany, CreditCompanyConfiguration>();
+            ApplyConfiguration<Contract, ContractConfiguration>();
+            ApplyConfiguration<Order, OrderConfiguration>();
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Metomarket.Data.Common.Repositories;
@@ -24,6 +25,28 @@ namespace Metomarket.Services.Data
             this.orderRepository = orderRepository;
             this.productService = productService;
             this.userService = userService;
+        }
+
+        public async Task<bool> CompleteOrdersAsync(IEnumerable<string> ids)
+        {
+            IEnumerable<Order> orders = this.orderRepository.All()
+                .Where(order => ids.Contains(order.Id))
+                .ToArray();
+
+            if (orders.Any(order => order.IsCompleted))
+            {
+                return false;
+            }
+
+            foreach (Order order in orders)
+            {
+                order.IsCompleted = true;
+                this.orderRepository.Update(order);
+            }
+
+            await this.orderRepository.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<string> CreateAsync(string productId, string issuerId, int quantity)

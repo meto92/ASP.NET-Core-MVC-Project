@@ -13,6 +13,8 @@ namespace Metomarket.Data.Models
         {
             this.Id = Guid.NewGuid().ToString();
             this.ShoppingCart = new ShoppingCart();
+            this.Orders = new HashSet<Order>();
+            this.Contracts = new HashSet<Contract>();
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
@@ -34,7 +36,11 @@ namespace Metomarket.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public ShoppingCart ShoppingCart { get; set; }
+        public virtual ShoppingCart ShoppingCart { get; set; }
+
+        public virtual ICollection<Order> Orders { get; set; }
+
+        public virtual ICollection<Contract> Contracts { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 

@@ -40,5 +40,14 @@ namespace Metomarket.Services.Data
 
             return true;
         }
+
+        public bool Exists(string id)
+        {
+            bool creditCompanyExists = this.creditCompanyRepository.All()
+                .Where(creditCompany => creditCompany.Id == id)
+                .FirstOrDefault() != null;
+
+            return creditCompanyExists;
+        }
     }
 }

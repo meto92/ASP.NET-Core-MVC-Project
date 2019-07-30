@@ -19,6 +19,8 @@ namespace Metomarket.Data.Models
 
         public decimal PricePerMonth { get; set; }
 
+        public string CreditCardNumber { get; set; }
+
         public string CustomerId { get; set; }
 
         public string CompanyId { get; set; }

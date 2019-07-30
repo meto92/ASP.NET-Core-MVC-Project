@@ -5,6 +5,8 @@ using Metomarket.Data.Common.Repositories;
 using Metomarket.Data.Models;
 using Metomarket.Services.Mapping;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Metomarket.Services.Data
 {
     public class ShoppingCartService : IShoppingCartService
@@ -49,12 +51,36 @@ namespace Metomarket.Services.Data
             return true;
         }
 
+        public async Task<bool> EmptyCartAsync(string userId)
+        {
+            ShoppingCart shoppingCart = this.shoppingCartRepository.All()
+                .Include(sc => sc.Orders)
+                .Where(sc => sc.CustomerId == userId)
+                .FirstOrDefault();
+
+            if (shoppingCart == null)
+            {
+                throw new ServiceException();
+            }
+
+            shoppingCart.Orders.Clear();
+
+            await this.shoppingCartRepository.SaveChangesAsync();
+
+            return true;
+        }
+
         public TModel FindByUserId<TModel>(string userId)
         {
             TModel model = this.shoppingCartRepository.All()
                 .Where(shoppingCart => shoppingCart.CustomerId == userId)
                 .To<TModel>()
                 .FirstOrDefault();
+
+            if (model == null)
+            {
+                throw new ServiceException();
+            }
 
             return model;
         }

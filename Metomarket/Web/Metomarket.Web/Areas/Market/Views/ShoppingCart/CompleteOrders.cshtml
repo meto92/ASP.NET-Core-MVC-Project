@@ -58,10 +58,8 @@
         <div class="form-group">
             <label asp-for="CreditCompanyId"></label>
             <select asp-for="CreditCompanyId">
-                <option value="1" selected>Company 1</option>
-                <option value="2">Company 2</option>
-                <option value="3">Company 3</option>
-                <option value="4">Company 4</option>
+                @*<vc:CreditCompanySelectOptions></vc:CreditCompanySelectOptions>*@
+                @await Component.InvokeAsync("CreditCompanySelectOptions")
             </select>
             <span asp-validation-for="CreditCompanyId" class="text-danger"></span>
         </div>

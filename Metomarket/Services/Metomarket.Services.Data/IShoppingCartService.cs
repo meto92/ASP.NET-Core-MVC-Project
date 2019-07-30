@@ -7,5 +7,7 @@ namespace Metomarket.Services.Data
         Task<bool> AddOrderAsync(string userId, string orderId);
 
         TModel FindByUserId<TModel>(string userId);
+
+        Task<bool> EmptyCartAsync(string userId);
     }
 }
