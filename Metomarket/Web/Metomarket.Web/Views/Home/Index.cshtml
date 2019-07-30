@@ -8,22 +8,46 @@
     <h1 class="display-4">Welcome to Metomarket. Happy shopping!</h1>
 </div>
 
-<div class="mt-4">
-    <section class="row">
-        @foreach (var product in Model.Products)
-        {
-            <div class="col-sm-6 col-md-3 col-xl-2 mb-3 d-flex">
-                <div class="card bg-dark text-white">
-                    <img class="card-img-top" src="@product.ImageUrl" alt="@product.Name image">
-                    <div class="card-body d-flex align-items-center flex-column">
-                        <h4 class="card-title text-center">@product.Name</h4>
-                        <h5 class="product-type font-italic">@product.TypeName</h5>
-                        <p class="card-text">Description</p>
-                        <p>$@($"{product.Price:f2}")</p>
-                        <a asp-area="Market" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary stretched-link mt-auto">Details</a>
+<div class="row mt-4">
+    <div class="col-md-3 col-lg-2">
+        <aside>
+            <h4 class="text-center">Filter products</h4>
+            <label class="search-wrapper">
+                <input class="mb-2" type="text" name="search" value="" placeholder="Product name . . ." />
+                <i class="fas fa-search"></i>
+            </label>
+
+            <nav class="bg-dark text-white rounded mb-3">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" data_name="">All</a>
+                    </li>
+                    @await Component.InvokeAsync("ProductTypeLinks")
+                </ul>
+            </nav>
+        </aside>
+    </div>
+    <div class="col-md-9 col-lg-10">
+        <section class="row">
+            @foreach (var product in Model.Products)
+            {
+                <article class="product col-sm-6 col-md-4 col-xl-3 mb-3 d-flex">
+                    <div class="card bg-dark text-white">
+                        <img class="card-img-top" src="@product.ImageUrl" alt="@product.Name image">
+                        <div class="card-body d-flex align-items-center flex-column">
+                            <h4 class="product-name card-title text-center">@product.Name</h4>
+                            <h5 class="product-type font-italic">@product.TypeName</h5>
+                            <p class="card-text">Description</p>
+                            <p>$@($"{product.Price:f2}")</p>
+                            <a asp-area="Market" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary mt-auto">Details</a>
+                        </div>
                     </div>
-                </div>
-            </div>
-        }
-    </section>
+                </article>
+            }
+        </section>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/index.js"></script>
+}

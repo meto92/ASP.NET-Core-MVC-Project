@@ -1,4 +1,4 @@
-form.form .input-wrapper input {
+form.form .input-wrapper input, .search-wrapper input {
   top: 0;
   left: 0;
   right: 0;
@@ -303,3 +303,48 @@ body {
       content: "Email:"; }
     .admin-users-index table td:nth-child(3n)::before {
       content: "Action:"; } }
+
+.search-wrapper {
+  height: 2.75rem;
+  position: relative;
+  border-radius: 0.3em;
+  display: flex;
+  align-items: center; }
+  .search-wrapper i {
+    z-index: 1;
+    position: absolute;
+    right: 0.1rem;
+    top: 0.7rem;
+    width: 1em;
+    color: #fff;
+    padding: 0;
+    margin: 0 0.75em;
+    transition: transform 0.2s 0.1s ease-in-out; }
+  .search-wrapper input {
+    position: absolute;
+    width: 100%;
+    padding: 0 2em 0 0.75em;
+    color: #fff;
+    background: #333;
+    border: none;
+    border-radius: 1.2em;
+    outline: none; }
+    .search-wrapper input:focus {
+      background: linear-gradient(90deg, #333, #00f, #333); }
+  .search-wrapper:hover i {
+    transform: scale(1.5) rotate(360deg); }
+  .search-wrapper ::-webkit-input-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  .search-wrapper ::-moz-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  .search-wrapper :-ms-input-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  .search-wrapper ::-ms-input-placeholder {
+    color: #ccc;
+    font-style: italic; }
+  .search-wrapper ::placeholder {
+    color: #ccc;
+    font-style: italic; }

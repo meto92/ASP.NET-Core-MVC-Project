@@ -1,0 +1,44 @@
+﻿.search-wrapper {
+    height: 2.75rem;
+    position: relative;
+    border-radius: 0.3em;
+    display: flex;
+    align-items: center;
+
+    i {
+        z-index: 1;
+        position: absolute;
+        right: 0.1rem;
+        top: 0.7rem;
+        width: 1em;
+        color: #fff;
+        padding: 0;
+        margin: 0 0.75em;
+        transition: transform 0.2s 0.1s ease-in-out;
+    }
+
+    input {
+        position: absolute;
+        width: 100%;
+        @extend %tlrb-zero;
+        padding: 0 2em 0 0.75em;
+        color: #fff;
+        background: #333;
+        border: none;
+        border-radius: 1.2em;
+        outline: none;
+
+        &:focus {
+            background: linear-gradient(90deg, #333, $blue, #333);
+        }
+    }
+
+    &:hover i {
+        transform: scale(1.5) rotate(360deg);
+    }
+
+    ::placeholder {
+        color: #ccc;
+        font-style: italic;
+    }
+}

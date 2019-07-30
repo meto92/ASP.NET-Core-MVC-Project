@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Metomarket.Web.Infrastructure.ComponentViewModels.ProductTypes.ProductTypeLinkViewModel>
+
+@foreach (var productType in Model)
+{
+    <li class="nav-item">
+        <a class="nav-link" data_name="@productType.Name">@productType.Name</a>
+    </li>
+}
