@@ -5,12 +5,14 @@ namespace Metomarket.Services.Data
 {
     public interface IContractService
     {
-        Task<bool> CreateAsync(
+        Task<string> CreateAsync(
             string userId,
             string creditCompanyId,
             IEnumerable<string> orderIds,
             decimal total,
             string creditCardNumber,
             int periodInMonths);
+
+        int GetCount();
     }
 }

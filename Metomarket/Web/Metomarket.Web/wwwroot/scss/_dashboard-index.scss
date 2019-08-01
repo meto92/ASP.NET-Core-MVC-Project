@@ -1,4 +1,4 @@
-﻿.product-types-index {
+﻿.dashboard-index {
     @include mq-max-w ($breakpoint-md - 1px) {
         table > thead {
             display: none;
@@ -12,16 +12,12 @@
                 padding-right: 1em;
             }
 
-            &:nth-child(3n - 1)::before {
-                content: "Product Type:";
+            &:nth-child(2n - 1)::before {
+                content: "Entity:";
             }
 
-            &:nth-child(3n - 2)::before {
-                content: "Products Count:";
-            }
-
-            &:nth-child(3n)::before {
-                content: "Action:";
+            &:nth-child(2n)::before {
+                content: "Count:";
             }
         }
     }

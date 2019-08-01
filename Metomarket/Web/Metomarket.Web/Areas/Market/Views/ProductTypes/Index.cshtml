@@ -13,6 +13,7 @@
                 <tr class="text-center1">
                     <th scope="row">Product Type</th>
                     <th>Products Count</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@
                     <tr>
                         <td>@productType.Name</td>
                         <td>@productType.ProductsCount</td>
+                        <td><a asp-area="Market" asp-controller="ProductTypes" asp-action="Edit" asp-route-id="@productType.Id" class="btn btn-warning">Edit</a></td>
                     </tr>
                 }
 

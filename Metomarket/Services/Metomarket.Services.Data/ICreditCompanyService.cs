@@ -11,5 +11,7 @@ namespace Metomarket.Services.Data
         IEnumerable<TModel> All<TModel>();
 
         bool Exists(string id);
+
+        int GetCount();
     }
 }

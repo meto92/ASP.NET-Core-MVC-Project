@@ -1,0 +1,25 @@
+﻿@model Metomarket.Web.ViewModels.ProductTypes.ProductTypeEditModel
+
+@{
+    ViewData["Title"] = "Edit Product Type";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<section class="mt-4">
+    <form asp-action="Edit" class="form mw-20r mx-auto">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <label class="input-wrapper">
+                <input asp-for="Name" class="form-control" placeholder="New name . . ." />
+            </label>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id" />
+
+        <div class="text-center">
+            <input type="submit" value="Edit" />
+        </div>
+    </form>
+</section>

@@ -16,5 +16,7 @@ namespace Metomarket.Services.Data
         Task<TModel> FindByIdAsync<TModel>(string userId);
 
         Task<bool> IsAdminAsync(string userId);
+
+        int GetCount();
     }
 }

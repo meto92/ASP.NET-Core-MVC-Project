@@ -10,5 +10,7 @@ namespace Metomarket.Services.Data
         Task<bool> DeleteAsync(string id, string userId);
 
         Task<bool> CompleteOrdersAsync(IEnumerable<string> ids);
+
+        int GetCount();
     }
 }

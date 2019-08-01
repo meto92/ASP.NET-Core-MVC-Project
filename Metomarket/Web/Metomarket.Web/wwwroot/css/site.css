@@ -272,10 +272,12 @@ body {
     width: 100%; }
     .product-types-index table td::before {
       padding-right: 1em; }
-    .product-types-index table td:nth-child(2n - 1)::before {
+    .product-types-index table td:nth-child(3n - 1)::before {
       content: "Product Type:"; }
-    .product-types-index table td:nth-child(2n)::before {
-      content: "Products Count:"; } }
+    .product-types-index table td:nth-child(3n - 2)::before {
+      content: "Products Count:"; }
+    .product-types-index table td:nth-child(3n)::before {
+      content: "Action:"; } }
 
 @media screen and (max-width: 767px) {
   .credit-companies-index table > thead {
@@ -306,6 +308,19 @@ body {
       content: "Email:"; }
     .admin-users-index table td:nth-child(3n)::before {
       content: "Action:"; } }
+
+@media screen and (max-width: 767px) {
+  .dashboard-index table > thead {
+    display: none; }
+  .dashboard-index table td {
+    display: block;
+    width: 100%; }
+    .dashboard-index table td::before {
+      padding-right: 1em; }
+    .dashboard-index table td:nth-child(2n - 1)::before {
+      content: "Entity:"; }
+    .dashboard-index table td:nth-child(2n)::before {
+      content: "Count:"; } }
 
 .search-wrapper {
   height: 2.75rem;

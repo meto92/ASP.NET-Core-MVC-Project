@@ -94,5 +94,12 @@ namespace Metomarket.Services.Data
 
             return isAdmin;
         }
+
+        public int GetCount()
+        {
+            int count = this.userManager.Users.Count();
+
+            return count;
+        }
     }
 }

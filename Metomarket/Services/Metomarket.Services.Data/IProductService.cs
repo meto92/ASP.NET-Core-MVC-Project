@@ -5,7 +5,7 @@ namespace Metomarket.Services.Data
 {
     public interface IProductService
     {
-        Task<bool> CreateAsync(string name, decimal price, string imageUrl, int inStock, string typeId);
+        Task<string> CreateAsync(string name, decimal price, string imageUrl, int inStock, string typeId);
 
         bool Exists(string id);
 
@@ -20,5 +20,7 @@ namespace Metomarket.Services.Data
         Task<bool> ReduceQuantityAsync(string id, int quantity);
 
         Task<bool> AddQuantityAsync(string id, int quantity);
+
+        int GetCount();
     }
 }

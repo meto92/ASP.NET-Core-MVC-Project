@@ -54,7 +54,7 @@ namespace Metomarket.Services.Data
             return models;
         }
 
-        public async Task<bool> CreateAsync(string name, decimal price, string imageUrl, int inStock, string typeId)
+        public async Task<string> CreateAsync(string name, decimal price, string imageUrl, int inStock, string typeId)
         {
             bool productTypeExists = this.productTypeRepository.All()
                 .Where(productType => productType.Id == typeId)
@@ -79,7 +79,7 @@ namespace Metomarket.Services.Data
             await this.productRepository.AddAsync(product);
             await this.productRepository.SaveChangesAsync();
 
-            return true;
+            return product.Id;
         }
 
         public async Task<bool> Delete(string id)
@@ -126,6 +126,13 @@ namespace Metomarket.Services.Data
             }
 
             return model;
+        }
+
+        public int GetCount()
+        {
+            int count = this.productRepository.All().Count();
+
+            return count;
         }
 
         public async Task<bool> ReduceQuantityAsync(string id, int quantity)

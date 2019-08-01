@@ -9,6 +9,8 @@ namespace Metomarket.Data.Seeding
 {
     public class ApplicationDbContextSeeder : ISeeder
     {
+        private const string SeederDoneMessage = "Seeder {0} done.";
+
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext == null)
@@ -33,7 +35,9 @@ namespace Metomarket.Data.Seeding
             {
                 await seeder.SeedAsync(dbContext, serviceProvider);
                 await dbContext.SaveChangesAsync();
-                logger.LogInformation($"Seeder {seeder.GetType().Name} done.");
+                logger.LogInformation(string.Format(
+                    SeederDoneMessage,
+                    seeder.GetType().Name));
             }
         }
     }

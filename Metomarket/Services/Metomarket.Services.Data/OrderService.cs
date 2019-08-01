@@ -105,5 +105,12 @@ namespace Metomarket.Services.Data
 
             return true;
         }
+
+        public int GetCount()
+        {
+            int count = this.orderRepository.All().Count();
+
+            return count;
+        }
     }
 }

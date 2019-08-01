@@ -32,6 +32,8 @@
 
         public const int ProductImageUrlMaxLength = 2500;
 
+        public const int ProductTypeNameMinLength = 2;
+
         public const int ProductTypeNameMaxLength = 20;
 
         public const int CreditCompanyNameMaxLength = 25;

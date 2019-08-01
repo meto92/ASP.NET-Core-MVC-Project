@@ -49,5 +49,12 @@ namespace Metomarket.Services.Data
 
             return creditCompanyExists;
         }
+
+        public int GetCount()
+        {
+            int count = this.creditCompanyRepository.All().Count();
+
+            return count;
+        }
     }
 }

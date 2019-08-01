@@ -30,7 +30,7 @@ namespace Metomarket.Services.Data
             this.userService = userService;
         }
 
-        public async Task<bool> CreateAsync(
+        public async Task<string> CreateAsync(
             string userId,
             string creditCompanyId,
             IEnumerable<string> orderIds,
@@ -59,7 +59,14 @@ namespace Metomarket.Services.Data
             await this.contractRepository.AddAsync(contract);
             await this.contractRepository.SaveChangesAsync();
 
-            return true;
+            return contract.Id;
+        }
+
+        public int GetCount()
+        {
+            int count = this.contractRepository.All().Count();
+
+            return count;
         }
 
         private async Task ValidateAsync(string userId, string creditCompanyId, int periodInMonths)

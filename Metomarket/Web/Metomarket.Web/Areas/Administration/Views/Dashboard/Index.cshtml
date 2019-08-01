@@ -4,4 +4,37 @@
     this.ViewData["ActivePage"] = AdminNavPages.Dashboard;
 }
 
-Settings: @this.Model.SettingsCount
+<section class="dashboard-index container-fluid">
+    <div class="row">
+        <table class="table table-dark table-striped table-hover col-md-8 rounded mx-auto">
+            <thead>
+                <tr class="text-center1">
+                    <th>Entity</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Contract</td>
+                    <td>@Model.ContractsCount</td>
+                </tr>
+                <tr>
+                    <td>Order</td>
+                    <td>@Model.OrdersCount</td>
+                </tr>
+                <tr>
+                    <td>Product</td>
+                    <td>@Model.ProductsCount</td>
+                </tr>
+                <tr>
+                    <td>Product Type</td>
+                    <td>@Model.ProductTypesCount</td>
+                </tr>
+                <tr>
+                    <td>User</td>
+                    <td>@Model.UsersCount</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

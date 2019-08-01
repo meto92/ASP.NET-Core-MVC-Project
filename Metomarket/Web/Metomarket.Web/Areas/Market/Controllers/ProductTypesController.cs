@@ -46,5 +46,26 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
             return this.RedirectToAction(nameof(this.Index));
         }
+
+        public IActionResult Edit(string id)
+        {
+            ProductTypeEditModel model = this.productTypeService
+                .FindById<ProductTypeEditModel>(id);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProductTypeEditModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            await this.productTypeService.UpdateAsync(model.Id, model.Name);
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
     }
 }
