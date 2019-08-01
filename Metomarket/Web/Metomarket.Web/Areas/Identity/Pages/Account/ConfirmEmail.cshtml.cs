@@ -15,6 +15,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string SlashIndex = "/Index";
+        private const string UserNotFoundMessage = "Unable to load user with ID '{0}'.";
+        private const string ErrorConfirmingEmailMessage = "Error confirming email for user with ID '{0}'.";
+
         private readonly UserManager<ApplicationUser> userManager;
 
         public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
@@ -26,19 +30,23 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
         {
             if (userId == null || code == null)
             {
-                return this.RedirectToPage("/Index");
+                return this.RedirectToPage(SlashIndex);
             }
 
             var user = await this.userManager.FindByIdAsync(userId);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{userId}'.");
+                return this.NotFound(string.Format(UserNotFoundMessage, userId));
             }
 
             var result = await this.userManager.ConfirmEmailAsync(user, code);
+
             if (!result.Succeeded)
             {
-                throw new InvalidOperationException($"Error confirming email for user with ID '{userId}':");
+                throw new InvalidOperationException(string.Format(
+                    ErrorConfirmingEmailMessage,
+                    userId));
             }
 
             return this.Page();

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,12 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
     public class ChangePasswordModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string UnableToLoadUserMessage = "Unable to load user with ID '{0}'.";
+        private const string SLashSetPassword = "./SetPassword";
+        private const string YouCannotChangeYourPasswordMessage = "You cannot change your password.";
+        private const string UserChangedPasswordSuccessfullyMessage = "User changed their password successfully.";
+        private const string PasswordHasBeenChangedMessage = "Your password has been changed.";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<ChangePasswordModel> logger;
@@ -37,15 +44,19 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             var hasPassword = await this.userManager.HasPasswordAsync(user);
+
             if (!hasPassword)
             {
-                return this.RedirectToPage("./SetPassword");
+                return this.RedirectToPage(SLashSetPassword);
             }
 
             return this.Page();
@@ -59,12 +70,26 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
+            }
+
+            if (user.UserName == GlobalConstants.RootAdministratorUsername
+                && user.Email == GlobalConstants.RootAdministratorEmail)
+            {
+                this.ModelState.AddModelError(
+                    string.Empty,
+                    YouCannotChangeYourPasswordMessage);
+
+                return this.Page();
             }
 
             var changePasswordResult = await this.userManager.ChangePasswordAsync(user, this.Input.OldPassword, this.Input.NewPassword);
+
             if (!changePasswordResult.Succeeded)
             {
                 foreach (var error in changePasswordResult.Errors)
@@ -76,28 +101,36 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             }
 
             await this.signInManager.RefreshSignInAsync(user);
-            this.logger.LogInformation("User changed their password successfully.");
-            this.StatusMessage = "Your password has been changed.";
+            this.logger.LogInformation(UserChangedPasswordSuccessfullyMessage);
+            this.StatusMessage = PasswordHasBeenChangedMessage;
 
             return this.RedirectToPage();
         }
 
         public class InputModel
         {
+            private const string OldPasswordDisplayName = "Current password";
+            private const int PasswordMinLength = GlobalConstants.PasswordMinLength;
+            private const int PasswordMaxLength = GlobalConstants.PasswordMaxLength;
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessageFormat;
+            private const string NewPasswordDisplayName = "New password";
+            private const string ConfirmPasswordDisplayName = "Confirm new password";
+            private const string ConfirmPasswordErrorMessage = "The new password and confirmation password do not match.";
+
             [Required]
             [DataType(DataType.Password)]
-            [Display(Name = "Current password")]
+            [Display(Name = OldPasswordDisplayName)]
             public string OldPassword { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(PasswordMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = PasswordMinLength)]
             [DataType(DataType.Password)]
-            [Display(Name = "New password")]
+            [Display(Name = NewPasswordDisplayName)]
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm new password")]
-            [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+            [Display(Name = ConfirmPasswordDisplayName)]
+            [Compare(nameof(NewPassword), ErrorMessage = ConfirmPasswordErrorMessage)]
             public string ConfirmPassword { get; set; }
         }
     }

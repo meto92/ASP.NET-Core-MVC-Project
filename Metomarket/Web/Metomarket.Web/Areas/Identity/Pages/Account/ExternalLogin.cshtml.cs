@@ -17,6 +17,17 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class ExternalLoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string Slash = "~/";
+        private const string SlashLogin = "./Login";
+        private const string SlashLockout = "./Lockout";
+        private const string SlashExternalLogin = "./ExternalLogin";
+        private const string Callback = "Callback";
+        private const string ErrorFromExternalProviderMessage = "Error from external provider: {0}";
+        private const string ErrorLoadingExternalLoginInfoMessage = "Error loading external login information.";
+        private const string SuccessfulLoginLogMessage = "{Name} logged in with {LoginProvider} provider.";
+        private const string ErrorLoadingExternalLoginInfoDuringConfirmationMessage = "Error loading external login information during confirmation.";
+        private const string UserCreatedAccountLogMessage = "User created an account using {Name} provider.";
+
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ExternalLoginModel> logger;
@@ -43,53 +54,63 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public IActionResult OnGetAsync()
         {
-            return this.RedirectToPage("./Login");
+            return this.RedirectToPage(SlashLogin);
         }
 
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = this.Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
+            var redirectUrl = this.Url.Page(SlashExternalLogin, pageHandler: Callback, values: new { returnUrl });
             var properties = this.signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+
             return new ChallengeResult(provider, properties);
         }
 
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content(Slash);
+
             if (remoteError != null)
             {
-                this.ErrorMessage = $"Error from external provider: {remoteError}";
-                return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                this.ErrorMessage = string.Format(
+                    ErrorFromExternalProviderMessage,
+                    remoteError);
+
+                return this.RedirectToPage(SlashLogin, new { ReturnUrl = returnUrl });
             }
 
             var info = await this.signInManager.GetExternalLoginInfoAsync();
+
             if (info == null)
             {
-                this.ErrorMessage = "Error loading external login information.";
-                return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                this.ErrorMessage = ErrorLoadingExternalLoginInfoMessage;
+
+                return this.RedirectToPage(SlashLogin, new { ReturnUrl = returnUrl });
             }
 
             // Sign in the user with this external login provider if the user already has a login.
             var result = await this.signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
             if (result.Succeeded)
             {
                 this.logger.LogInformation(
-                    "{Name} logged in with {LoginProvider} provider.",
+                    SuccessfulLoginLogMessage,
                     info.Principal.Identity.Name,
                     info.LoginProvider);
+
                 return this.LocalRedirect(returnUrl);
             }
 
             if (result.IsLockedOut)
             {
-                return this.RedirectToPage("./Lockout");
+                return this.RedirectToPage(SlashLockout);
             }
             else
             {
                 // If the user does not have an account, then ask the user to create an account.
                 this.ReturnUrl = returnUrl;
                 this.LoginProvider = info.LoginProvider;
+
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
                     this.Input = new InputModel
@@ -104,20 +125,23 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content(Slash);
 
             // Get the information about the user from the external login provider
             var info = await this.signInManager.GetExternalLoginInfoAsync();
+
             if (info == null)
             {
-                this.ErrorMessage = "Error loading external login information during confirmation.";
-                return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                this.ErrorMessage = ErrorLoadingExternalLoginInfoDuringConfirmationMessage;
+
+                return this.RedirectToPage(SlashLogin, new { ReturnUrl = returnUrl });
             }
 
             if (this.ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
                 var result = await this.userManager.CreateAsync(user);
+
                 if (result.Succeeded)
                 {
                     result = await this.userManager.AddLoginAsync(user, info);
@@ -125,8 +149,9 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                     {
                         await this.signInManager.SignInAsync(user, isPersistent: false);
                         this.logger.LogInformation(
-                            "User created an account using {Name} provider.",
+                            UserCreatedAccountLogMessage,
                             info.LoginProvider);
+
                         return this.LocalRedirect(returnUrl);
                     }
                 }
@@ -139,6 +164,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
             this.LoginProvider = info.LoginProvider;
             this.ReturnUrl = returnUrl;
+
             return this.Page();
         }
 

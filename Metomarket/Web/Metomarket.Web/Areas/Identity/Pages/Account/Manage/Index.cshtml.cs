@@ -17,6 +17,16 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
     public class IndexModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string UnableToLoadUserMessage = "Unable to load user with ID '{0}'.";
+        private const string ProfileUpdatedMessage = "Your profile has been updated";
+        private const string SlashAccountSlashConfirmEmail = "/Account/ConfirmEmail";
+        private const string ConfirmEmailMessage = "Confirm your email";
+        private const string ConfirmEmailHtmlMessage = "Please confirm your account by <a href='{0}'>clicking here</a>.";
+        private const string VerificationEmailSentMessage = "Verification email sent. Please check your email.";
+        private const string UnexpectedErrorSettingUsernaneMessage = "Unexpected error occurred setting username for user with ID '{0}'.";
+        private const string UnexpectedErrorSettingPhoneNumberMessage = "Unexpected error occurred setting phone number for user with ID '{0}'.";
+        private const string YouCannotChangeYourUsernameMessage = "You cannot change your username.";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IEmailSender emailSender;
@@ -47,7 +57,9 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             var userName = await this.userManager.GetUserNameAsync(user);
@@ -78,14 +90,14 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             var username = await this.userManager.GetUserNameAsync(user);
 
-            if (this.Input.Username != username
-                && user.Email != GlobalConstants.RootAdministratorEmail
-                && user.UserName != GlobalConstants.RootAdministratorUsername)
+            if (this.Input.Username != username)
             {
                 await this.TryChangeUsernameAsync(user);
             }
@@ -98,7 +110,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             }
 
             await this.signInManager.RefreshSignInAsync(user);
-            this.StatusMessage = "Your profile has been updated";
+            this.StatusMessage = ProfileUpdatedMessage;
 
             return this.RedirectToPage();
         }
@@ -114,36 +126,53 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             var userId = await this.userManager.GetUserIdAsync(user);
             var email = await this.userManager.GetEmailAsync(user);
             var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
             var callbackUrl = this.Url.Page(
-                "/Account/ConfirmEmail",
+                SlashAccountSlashConfirmEmail,
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: this.Request.Scheme);
 
             await this.emailSender.SendEmailAsync(
                 email,
-                "Confirm your email",
-                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                ConfirmEmailMessage,
+                string.Format(
+                    ConfirmEmailHtmlMessage,
+                    HtmlEncoder.Default.Encode(callbackUrl)));
 
-            this.StatusMessage = "Verification email sent. Please check your email.";
+            this.StatusMessage = VerificationEmailSentMessage;
 
             return this.RedirectToPage();
         }
 
         private async Task TryChangeUsernameAsync(ApplicationUser user)
         {
+            if (user.Email == GlobalConstants.RootAdministratorEmail
+                && user.UserName == GlobalConstants.RootAdministratorUsername)
+            {
+                this.ModelState.AddModelError(
+                    string.Empty,
+                    YouCannotChangeYourUsernameMessage);
+
+                return;
+            }
+
             var setUsernameResult = await this.userManager.SetUserNameAsync(user, this.Input.Username);
 
             if (!setUsernameResult.Succeeded)
             {
                 var userId = await this.userManager.GetUserIdAsync(user);
-                throw new InvalidOperationException($"Unexpected error occurred setting username for user with ID '{userId}'.");
+
+                throw new InvalidOperationException(string.Format(
+                    UnexpectedErrorSettingUsernaneMessage,
+                    userId));
             }
         }
 
@@ -154,7 +183,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             if (!setPhoneResult.Succeeded)
             {
                 var userId = await this.userManager.GetUserIdAsync(user);
-                throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+
+                throw new InvalidOperationException(string.Format(
+                    UnexpectedErrorSettingPhoneNumberMessage,
+                    userId));
             }
         }
 

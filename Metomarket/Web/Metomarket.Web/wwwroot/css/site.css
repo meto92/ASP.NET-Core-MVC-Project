@@ -190,9 +190,12 @@ form.form {
     form.form button[type=submit]:hover {
       -webkit-animation: btn-bg 1s linear infinite;
       animation: btn-bg 1s linear infinite; }
-  form.form span.text-danger {
-    background: #fff;
+  form.form .text-danger {
     font-weight: bold; }
+  form.form span.text-danger {
+    background: #fff; }
+  form.form div.text-danger {
+    text-shadow: 1px 1px 1px red; }
   form.form a {
     background: #fff;
     border-radius: 0.5em;

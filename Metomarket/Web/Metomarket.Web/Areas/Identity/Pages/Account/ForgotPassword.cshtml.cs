@@ -17,6 +17,11 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string SlashForgotPasswordConfirmation = "./ForgotPasswordConfirmation";
+        private const string SlashAccountSlashResetPassword = "/Account/ResetPassword";
+        private const string ResetPasswordMessage = "Reset Password";
+        private const string ResetPasswordHtmlMessage = "Please reset your password by <a href='{0}'>clicking here</a>.";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IEmailSender emailSender;
 
@@ -34,27 +39,31 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             if (this.ModelState.IsValid)
             {
                 var user = await this.userManager.FindByEmailAsync(this.Input.Email);
+
                 if (user == null || !(await this.userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    return this.RedirectToPage("./ForgotPasswordConfirmation");
+
+                    return this.RedirectToPage(SlashForgotPasswordConfirmation);
                 }
 
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await this.userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = this.Url.Page(
-                    "/Account/ResetPassword",
+                    SlashAccountSlashResetPassword,
                     pageHandler: null,
                     values: new { code },
                     protocol: this.Request.Scheme);
 
                 await this.emailSender.SendEmailAsync(
                     this.Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    ResetPasswordMessage,
+                    string.Format(
+                        ResetPasswordHtmlMessage,
+                        HtmlEncoder.Default.Encode(callbackUrl)));
 
-                return this.RedirectToPage("./ForgotPasswordConfirmation");
+                return this.RedirectToPage(SlashForgotPasswordConfirmation);
             }
 
             return this.Page();

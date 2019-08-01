@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center">@ViewData["Title"]</h1>
 <h4>Associate your @Model.LoginProvider account.</h4>
 <hr />
 
@@ -16,11 +16,14 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
+                <label class="input-wrapper with-icon">
+                    <input asp-for="Input.Email" placeholder="Email . . ." />
+                    <i class="far fa-envelope"></i>
+                </label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>

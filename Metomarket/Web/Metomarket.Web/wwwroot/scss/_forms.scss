@@ -182,9 +182,16 @@
         // }
     }
 
+    .text-danger {
+        font-weight: bold;
+    }
+
     span.text-danger {
         background: #fff;
-        font-weight: bold;
+    }
+
+    div.text-danger {
+        text-shadow: 1px 1px 1px red;
     }
 
     a {

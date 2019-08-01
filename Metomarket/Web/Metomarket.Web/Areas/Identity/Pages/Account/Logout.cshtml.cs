@@ -15,6 +15,8 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class LogoutModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string UserLoggedOutMessage = "User logged out.";
+
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<LogoutModel> logger;
 
@@ -27,7 +29,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnGet(string returnUrl = null)
         {
             await this.signInManager.SignOutAsync();
-            this.logger.LogInformation("User logged out.");
+            this.logger.LogInformation(UserLoggedOutMessage);
 
             if (returnUrl != null)
             {
@@ -35,10 +37,6 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             }
 
             return this.Page();
-        }
-
-        public void OnPost()
-        {
         }
     }
 }

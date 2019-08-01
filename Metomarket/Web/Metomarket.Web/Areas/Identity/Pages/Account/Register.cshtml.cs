@@ -19,6 +19,12 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string Slash = "~/";
+        private const string UserCreatedNewAccountLogMessage = "User created a new account with password.";
+        private const string SlashAccountSlashConfirmEmail = "/Account/ConfirmEmail";
+        private const string ConfirmYourEmailMessage = "Confirm your email";
+        private const string ConfirmAccountHtmlMessage = "Please confirm your account by <a href='{0}'>clicking here</a>.";
+
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
@@ -48,7 +54,8 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content(Slash);
+
             if (this.ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -62,23 +69,27 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                 };
 
                 var result = await this.userManager.CreateAsync(user, this.Input.Password);
+
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User created a new account with password.");
+                    this.logger.LogInformation(UserCreatedNewAccountLogMessage);
 
                     var code = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = this.Url.Page(
-                        "/Account/ConfirmEmail",
+                        SlashAccountSlashConfirmEmail,
                         pageHandler: null,
                         values: new { userId = user.Id, code = code },
                         protocol: this.Request.Scheme);
 
                     await this.emailSender.SendEmailAsync(
                         this.Input.Email,
-                        "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        ConfirmYourEmailMessage,
+                        string.Format(
+                            ConfirmAccountHtmlMessage,
+                            HtmlEncoder.Default.Encode(callbackUrl)));
 
                     await this.signInManager.SignInAsync(user, isPersistent: false);
+
                     return this.LocalRedirect(returnUrl);
                 }
 
@@ -102,8 +113,8 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             private const string FirstNameDisplayName = "First name";
             private const int LastNameMaxLength = GlobalConstants.UserLastNameMaxLength;
             private const string LastNameDisplayName = "Last name";
-            private const int PasswordMinLength = 6;
-            private const int PasswordMaxLength = 100;
+            private const int PasswordMinLength = GlobalConstants.PasswordMinLength;
+            private const int PasswordMaxLength = GlobalConstants.PasswordMaxLength;
             private const string ConfirmPasswordDisplayName = "Confirm password";
             private const string PasswordsDoNotMatchMessage = "The password and confirmation password do not match.";
 

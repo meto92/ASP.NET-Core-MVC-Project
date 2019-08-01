@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,9 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class ResetPasswordModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string CodeMustBeSuppliedMessage = "A code must be supplied for password reset.";
+        private const string SlashResetPasswordConfirmation = "./ResetPasswordConfirmation";
+
         private readonly UserManager<ApplicationUser> userManager;
 
         public ResetPasswordModel(UserManager<ApplicationUser> userManager)
@@ -29,7 +33,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return this.BadRequest("A code must be supplied for password reset.");
+                return this.BadRequest(CodeMustBeSuppliedMessage);
             }
             else
             {
@@ -37,6 +41,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                 {
                     Code = code,
                 };
+
                 return this.Page();
             }
         }
@@ -49,16 +54,18 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             }
 
             var user = await this.userManager.FindByEmailAsync(this.Input.Email);
+
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return this.RedirectToPage("./ResetPasswordConfirmation");
+                return this.RedirectToPage(SlashResetPasswordConfirmation);
             }
 
             var result = await this.userManager.ResetPasswordAsync(user, this.Input.Code, this.Input.Password);
+
             if (result.Succeeded)
             {
-                return this.RedirectToPage("./ResetPasswordConfirmation");
+                return this.RedirectToPage(SlashResetPasswordConfirmation);
             }
 
             foreach (var error in result.Errors)
@@ -71,18 +78,24 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            private const int PasswordMinLength = GlobalConstants.PasswordMinLength;
+            private const int PasswordMaxLength = GlobalConstants.PasswordMaxLength;
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessageFormat;
+            private const string ConfirmPasswordDisplayName = "Confirm password";
+            private const string ConfirmPasswordErrorMessage = "The password and confirmation password do not match.";
+
             [Required]
             [EmailAddress]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(PasswordMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = PasswordMinLength)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = ConfirmPasswordDisplayName)]
+            [Compare(nameof(Password), ErrorMessage = ConfirmPasswordErrorMessage)]
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }

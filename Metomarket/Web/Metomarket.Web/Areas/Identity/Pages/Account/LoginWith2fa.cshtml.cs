@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +18,16 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class LoginWith2faModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string Slash = "~/";
+        private const string SlashLockout = "./Lockout";
+        private const string UnableToLoad2faUserMessage = "Unable to load two-factor authentication user.";
+        private const string Space = " ";
+        private const string Dash = "-";
+        private const string UserLoggedInWith2faLogMessage = "User with ID '{UserId}' logged in with 2fa.";
+        private const string AccountLockedOutMessage = "User with ID '{UserId}' account locked out.";
+        private const string InvalidAuthenticatorCodeEnteredMessage = "Invalid authenticator code entered for user with ID '{UserId}'.";
+        private const string InvalidAuthenticatorCodeMessage = "Invalid authenticator code.";
+
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<LoginWith2faModel> logger;
 
@@ -40,7 +51,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                throw new InvalidOperationException(UnableToLoad2faUserMessage);
             }
 
             this.ReturnUrl = returnUrl;
@@ -56,45 +67,55 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                 return this.Page();
             }
 
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content(Slash);
 
             var user = await this.signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                throw new InvalidOperationException(UnableToLoad2faUserMessage);
             }
 
-            var authenticatorCode = this.Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var authenticatorCode = this.Input.TwoFactorCode
+                .Replace(Space, string.Empty)
+                .Replace(Dash, string.Empty);
 
             var result = await this.signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, this.Input.RememberMachine);
 
             if (result.Succeeded)
             {
-                this.logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
+                this.logger.LogInformation(UserLoggedInWith2faLogMessage, user.Id);
+
                 return this.LocalRedirect(returnUrl);
             }
             else if (result.IsLockedOut)
             {
-                this.logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
-                return this.RedirectToPage("./Lockout");
+                this.logger.LogWarning(AccountLockedOutMessage, user.Id);
+
+                return this.RedirectToPage(SlashLockout);
             }
             else
             {
-                this.logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
-                this.ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
+                this.logger.LogWarning(InvalidAuthenticatorCodeEnteredMessage, user.Id);
+                this.ModelState.AddModelError(string.Empty, InvalidAuthenticatorCodeMessage);
+
                 return this.Page();
             }
         }
 
         public class InputModel
         {
+            private const int TwoFactorCodeMinLength = 6;
+            private const int TwoFactorCodeMaxLength = 7;
+            private const string TwoFactorCodeDisplayName = "Authenticator code";
+            private const string RememberMachineDisplayName = "Remember this machine";
+
             [Required]
-            [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(TwoFactorCodeMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = TwoFactorCodeMinLength)]
             [DataType(DataType.Text)]
-            [Display(Name = "Authenticator code")]
+            [Display(Name = TwoFactorCodeDisplayName)]
             public string TwoFactorCode { get; set; }
 
-            [Display(Name = "Remember this machine")]
+            [Display(Name = RememberMachineDisplayName)]
             public bool RememberMachine { get; set; }
         }
     }

@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,17 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
     public class EnableAuthenticatorModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string UnableToLoadUserMessage = "Unable to load user with ID '{0}'.";
+        private const string Space = " ";
+        private const string Dash = "-";
+        private const string InputDotCode = "Input.Code";
+        private const string InvalidVerificationCodeMessage = "Verification code is invalid.";
+        private const string UserHasEnabled2faLogMessage = "User with ID '{UserId}' has enabled 2FA with an authenticator app.";
+        private const int NumberOfGenerated2faRecoveryCodes = 10;
+        private const string AuthenticationAppVerifiedMessage = "Your authenticator app has been verified.";
+        private const string SlashShowRecoveryCodes = "./ShowRecoveryCodes";
+        private const string SlashTwoFactorAuthentication = "./TwoFactorAuthentication";
+        private const string MetomarketDotWeb = "Metomarket.Web";
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
         private readonly UserManager<ApplicationUser> userManager;
@@ -49,9 +61,12 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             await this.LoadSharedKeyAndQrCodeUriAsync(user);
@@ -62,45 +77,55 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             if (!this.ModelState.IsValid)
             {
                 await this.LoadSharedKeyAndQrCodeUriAsync(user);
+
                 return this.Page();
             }
 
             // Strip spaces and hypens
-            var verificationCode = this.Input.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var verificationCode = this.Input.Code
+                .Replace(Space, string.Empty)
+                .Replace(Dash, string.Empty);
 
             var is2faTokenValid = await this.userManager.VerifyTwoFactorTokenAsync(
                 user, this.userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
 
             if (!is2faTokenValid)
             {
-                this.ModelState.AddModelError("Input.Code", "Verification code is invalid.");
+                this.ModelState.AddModelError(InputDotCode, InvalidVerificationCodeMessage);
                 await this.LoadSharedKeyAndQrCodeUriAsync(user);
+
                 return this.Page();
             }
 
             await this.userManager.SetTwoFactorEnabledAsync(user, true);
             var userId = await this.userManager.GetUserIdAsync(user);
-            this.logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
+            this.logger.LogInformation(UserHasEnabled2faLogMessage, userId);
 
-            this.StatusMessage = "Your authenticator app has been verified.";
+            this.StatusMessage = AuthenticationAppVerifiedMessage;
 
             if (await this.userManager.CountRecoveryCodesAsync(user) == 0)
             {
-                var recoveryCodes = await this.userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+                var recoveryCodes = await this.userManager.GenerateNewTwoFactorRecoveryCodesAsync(
+                    user,
+                    NumberOfGenerated2faRecoveryCodes);
                 this.RecoveryCodes = recoveryCodes.ToArray();
-                return this.RedirectToPage("./ShowRecoveryCodes");
+
+                return this.RedirectToPage(SlashShowRecoveryCodes);
             }
             else
             {
-                return this.RedirectToPage("./TwoFactorAuthentication");
+                return this.RedirectToPage(SlashTwoFactorAuthentication);
             }
         }
 
@@ -108,6 +133,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         {
             // Load the authenticator key & QR code URI to display on the form
             var unformattedKey = await this.userManager.GetAuthenticatorKeyAsync(user);
+
             if (string.IsNullOrEmpty(unformattedKey))
             {
                 await this.userManager.ResetAuthenticatorKeyAsync(user);
@@ -122,12 +148,14 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
 
         private string FormatKey(string unformattedKey)
         {
-            var result = new StringBuilder();
+            const int four = 4;
             int currentPosition = 0;
-            while (currentPosition + 4 < unformattedKey.Length)
+            var result = new StringBuilder();
+
+            while (currentPosition + four < unformattedKey.Length)
             {
-                result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
-                currentPosition += 4;
+                result.Append(unformattedKey.Substring(currentPosition, four)).Append(Space);
+                currentPosition += four;
             }
 
             if (currentPosition < unformattedKey.Length)
@@ -142,17 +170,22 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         {
             return string.Format(
                 AuthenticatorUriFormat,
-                this.urlEncoder.Encode("Metomarket.Web"),
+                this.urlEncoder.Encode(MetomarketDotWeb),
                 this.urlEncoder.Encode(email),
                 unformattedKey);
         }
 
         public class InputModel
         {
+            private const int CodeMinLength = 6;
+            private const int CodeMaxLength = 7;
+            private const string CodeDisplayName = "Verification Code";
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessageFormat;
+
             [Required]
-            [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(CodeMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = CodeMinLength)]
             [DataType(DataType.Text)]
-            [Display(Name = "Verification Code")]
+            [Display(Name = CodeDisplayName)]
             public string Code { get; set; }
         }
     }

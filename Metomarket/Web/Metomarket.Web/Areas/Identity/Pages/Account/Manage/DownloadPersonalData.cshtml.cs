@@ -19,6 +19,13 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
     public class DownloadPersonalDataModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string UnableToLoadUserMessage = "Unable to load user with ID '{0}'.";
+        private const string UserAskedForPersonalDataLogMessage = "User with ID '{UserId}' asked for their personal data.";
+        private const string NullStr = "null";
+        private const string ContentDispositionHeaderKey = "Content-Disposition";
+        private const string ContentDispositionHeaderValue = "attachment; filename=PersonalData.json";
+        private const string FileContentType = "text/json";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<DownloadPersonalDataModel> logger;
 
@@ -33,24 +40,35 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
-            this.logger.LogInformation("User with ID '{UserId}' asked for their personal data.", this.userManager.GetUserId(this.User));
+            this.logger.LogInformation(
+                UserAskedForPersonalDataLogMessage,
+                this.userManager.GetUserId(this.User));
 
             // Only include personal data for download
             var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(ApplicationUser).GetProperties().Where(
-                            prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+            var personalDataProps = typeof(ApplicationUser).GetProperties()
+                .Where(prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
+
             foreach (var p in personalDataProps)
             {
-                personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
+                personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? NullStr);
             }
 
-            this.Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.json");
-            return new FileContentResult(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(personalData)), "text/json");
+            this.Response.Headers.Add(
+                ContentDispositionHeaderKey,
+                ContentDispositionHeaderValue);
+
+            return new FileContentResult(
+                Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(personalData)),
+                FileContentType);
         }
     }
 }

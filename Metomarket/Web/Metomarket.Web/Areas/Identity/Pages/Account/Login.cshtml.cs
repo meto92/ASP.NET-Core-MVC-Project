@@ -19,7 +19,12 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string Slash = "~/";
         private const string InvalidLoginAttempMessage = "Invalid login attempt.";
+        private const string UserLoggedInMessage = "User logged in.";
+        private const string SlashLoginWith2fa = "./LoginWith2fa";
+        private const string AccountLockedOutMessage = "User account locked out.";
+        private const string SlashLockout = "./Lockout";
 
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
@@ -49,7 +54,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                 this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
             }
 
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content(Slash);
 
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -61,7 +66,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl = returnUrl ?? this.Url.Content(Slash);
 
             if (this.ModelState.IsValid)
             {
@@ -72,6 +77,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                 if (user == null)
                 {
                     this.ModelState.AddModelError(string.Empty, InvalidLoginAttempMessage);
+
                     return this.Page();
                 }
 
@@ -81,23 +87,28 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User logged in.");
+                    this.logger.LogInformation(UserLoggedInMessage);
+
                     return this.LocalRedirect(returnUrl);
                 }
 
                 if (result.RequiresTwoFactor)
                 {
-                    return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
+                    return this.RedirectToPage(
+                        SlashLoginWith2fa,
+                        new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
                 }
 
                 if (result.IsLockedOut)
                 {
-                    this.logger.LogWarning("User account locked out.");
-                    return this.RedirectToPage("./Lockout");
+                    this.logger.LogWarning(AccountLockedOutMessage);
+
+                    return this.RedirectToPage(SlashLockout);
                 }
                 else
                 {
                     this.ModelState.AddModelError(string.Empty, InvalidLoginAttempMessage);
+
                     return this.Page();
                 }
             }
@@ -108,6 +119,8 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            private const string RememberMeDisplayName = "Remember me?";
+
             [Required]
             [EmailAddress]
             public string Email { get; set; }
@@ -116,7 +129,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = RememberMeDisplayName)]
             public bool RememberMe { get; set; }
         }
     }

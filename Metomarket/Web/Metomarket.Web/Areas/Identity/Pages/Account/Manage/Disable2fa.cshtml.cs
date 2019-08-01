@@ -14,6 +14,13 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
     public class Disable2faModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
+        private const string UnableToLoadUserMessage = "Unable to load user with ID '{0}'.";
+        private const string CannotDisable2faMessage = "Cannot disable 2FA for user with ID '{0}' as it's not currently enabled.";
+        private const string UnexpectedErrorDisabling2faMessage = "Unexpected error occurred disabling 2FA for user with ID '{0}'.";
+        private const string UserHasDisabled2faLogMessage = "User with ID '{UserId}' has disabled 2fa.";
+        private const string TwoFactorAuthenticationDisabledMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
+        private const string SlashTwoFactorAuthentication = "./TwoFactorAuthentication";
+
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<Disable2faModel> logger;
 
@@ -33,12 +40,16 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             if (!await this.userManager.GetTwoFactorEnabledAsync(user))
             {
-                throw new InvalidOperationException($"Cannot disable 2FA for user with ID '{this.userManager.GetUserId(this.User)}' as it's not currently enabled.");
+                throw new InvalidOperationException(string.Format(
+                    CannotDisable2faMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             return this.Page();
@@ -47,20 +58,29 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
-                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
+                return this.NotFound(string.Format(
+                    UnableToLoadUserMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
             var disable2faResult = await this.userManager.SetTwoFactorEnabledAsync(user, false);
+
             if (!disable2faResult.Succeeded)
             {
-                throw new InvalidOperationException($"Unexpected error occurred disabling 2FA for user with ID '{this.userManager.GetUserId(this.User)}'.");
+                throw new InvalidOperationException(string.Format(
+                    UnexpectedErrorDisabling2faMessage,
+                    this.userManager.GetUserId(this.User)));
             }
 
-            this.logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", this.userManager.GetUserId(this.User));
-            this.StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
-            return this.RedirectToPage("./TwoFactorAuthentication");
+            this.logger.LogInformation(
+                UserHasDisabled2faLogMessage,
+                this.userManager.GetUserId(this.User));
+            this.StatusMessage = TwoFactorAuthenticationDisabledMessage;
+
+            return this.RedirectToPage(SlashTwoFactorAuthentication);
         }
     }
 }

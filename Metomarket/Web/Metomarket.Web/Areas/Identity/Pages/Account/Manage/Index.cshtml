@@ -5,38 +5,55 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h4>@ViewData["Title"]</h4>
+<h4 class="text-center text-md-left">@ViewData["Title"]</h4>
+
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Username"></label>
-                <input asp-for="Input.Username" class="form-control" />
-                <span asp-validation-for="Input.Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email"></label>
-                @if (Model.IsEmailConfirmed)
-                {
-                    <div class="input-group">
-                        <input asp-for="Email" class="form-control" disabled />
-                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                    </div>
-                }
-                else
-                {
-                    <input asp-for="Email" class="form-control" disabled />
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                }
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
-        </form>
-    </div>
-</div>
+
+<section class="mw-30r mx-auto mx-md-0">
+    <form id="profile-form" method="post" class="form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Input.Username"></label>
+            <label class="input-wrapper with-icon">
+                <input asp-for="Input.Username" />
+                <i class="far fa-user"></i>
+            </label>
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            @if (Model.IsEmailConfirmed)
+            {
+                <div class="form-group">
+                    <label class="input-wrapper with-icon">
+                        <input asp-for="Email" disabled />
+                        <i class="far fa-envelope"></i>
+                    </label>
+                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                </div>
+            }
+            else
+            {
+                <label class="input-wrapper with-icon">
+                    <input asp-for="Email" disabled />
+                    <i class="far fa-envelope"></i>
+                </label>
+                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+            }
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.PhoneNumber"></label>
+            <label class="input-wrapper with-icon">
+                <input asp-for="Input.PhoneNumber" />
+                <i class="fas fa-phone"></i>
+            </label>
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+            
+        <div class="text-center">
+            <button id="update-profile-button" type="submit">Save</button>
+        </div>
+    </form>
+</section>

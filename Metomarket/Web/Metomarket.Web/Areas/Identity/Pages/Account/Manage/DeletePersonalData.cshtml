@@ -14,17 +14,23 @@
     </p>
 </div>
 
-<div>
-    <form id="delete-user" method="post" class="form-group">
+<div class="mw-20r mx-auto">
+    <form id="delete-user" method="post" class="form-group form">
         <div asp-validation-summary="All" class="text-danger"></div>
         @if (Model.RequirePassword)
         {
             <div class="form-group">
                 <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
+                <label class="input-wrapper with-icon">
+                    <input asp-for="Input.Password" />
+                    <i class="fas fa-lock"></i>
+                </label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
         }
-        <button class="btn btn-danger" type="submit">Delete data and close my account</button>
+
+        <div class="text-center">
+            <button class="btn btn-danger" type="submit">Delete data and close my account</button>
+        </div>
     </form>
 </div>
