@@ -10,11 +10,24 @@
         <li class="nav-item mr-md-3 mb-2">
             <a class="nav-link text-white px-2 rounded" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @(this.User.Identity.Name)!</a>
         </li>
+        <li class="nav-item mr-md-3 mb-2">
+            <a class="nav-link text-white px-3 rounded" asp-area="Market" asp-controller="ShoppingCart" asp-action="Index"><i class="fas fa-shopping-cart"></i></a>
+        </li>
         if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {
-            <li class="nav-item mr-md-3 mb-2">
-                <a class="nav-link text-white px-2 rounded" asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin">Admin</a>
-            </li>
+			<li class="nav-item mr-md-3 mb-2 dropdown">
+                <button class="btn btn-secondary w-100 text-left border-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Admin
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" asp-area="Administration" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                    <a class="dropdown-item" asp-area="Market" asp-controller="Products" asp-action="Create">Create Product</a>
+                    <a class="dropdown-item" asp-area="Market" asp-controller="ProductTypes" asp-action="Index">Product Types</a>
+                    <a class="dropdown-item" asp-area="Market" asp-controller="ProductTypes" asp-action="Create">Create Product Type</a>
+                    <a class="dropdown-item" asp-area="CreditCompanies" asp-controller="CreditCompanies" asp-action="Index">Credit Companies</a>
+                    <a class="dropdown-item" asp-area="CreditCompanies" asp-controller="CreditCompanies" asp-action="Add">Add Credit Company</a>
+                </div>
+			</li>
         }
         <li class="nav-item mr-md-3 mb-2">
             <a class="nav-link text-white px-2 rounded" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">Logout</a>

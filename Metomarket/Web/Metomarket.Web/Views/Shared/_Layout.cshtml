@@ -36,13 +36,6 @@
                         <li class="nav-item mr-md-3 mb-2">
                             <a class="nav-link text-white px-2 rounded" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (this.User.Identity.IsAuthenticated
-                           && this.User.IsInRole(Metomarket.Common.GlobalConstants.AdministratorRoleName))
-                        {
-                            <li class="nav-item mr-md-3 mb-2">
-                                <a class="nav-link text-white px-2 rounded" asp-area="market" asp-controller="Products" asp-action="Create">Create Product</a>
-                            </li>
-                        }
                     </ul>
                 </div>
             </div>
