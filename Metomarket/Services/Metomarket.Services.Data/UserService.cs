@@ -14,7 +14,7 @@ namespace Metomarket.Services.Data
 {
     public class UserService : IUserService
     {
-        private const string UserNotFoundMessage = "User with id {0} could not be found.";
+        private const string UserNotFoundMessage = "User with ID '{0}' could not be found.";
 
         private readonly UserManager<ApplicationUser> userManager;
 
