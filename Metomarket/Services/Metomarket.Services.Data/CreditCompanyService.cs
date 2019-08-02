@@ -11,6 +11,8 @@ namespace Metomarket.Services.Data
 {
     public class CreditCompanyService : ICreditCompanyService
     {
+        private const string CreditCompanyNameAlreadyInDb = "Credit company '{0}' is already in database.";
+
         private readonly IRepository<CreditCompany> creditCompanyRepository;
 
         public CreditCompanyService(IRepository<CreditCompany> creditCompanyRepository)
@@ -27,7 +29,7 @@ namespace Metomarket.Services.Data
             return models;
         }
 
-        public async Task<bool> CreateAsync(string name, DateTime activeSince)
+        public async Task<string> CreateAsync(string name, DateTime activeSince)
         {
             CreditCompany creditCompany = new CreditCompany
             {
@@ -35,10 +37,21 @@ namespace Metomarket.Services.Data
                 ActiveSince = activeSince,
             };
 
+            bool exists = this.creditCompanyRepository.All()
+                .Where(cc => cc.Name == name)
+                .FirstOrDefault() != null;
+
+            if (exists)
+            {
+                throw new ServiceException(string.Format(
+                    CreditCompanyNameAlreadyInDb,
+                    name));
+            }
+
             await this.creditCompanyRepository.AddAsync(creditCompany);
             await this.creditCompanyRepository.SaveChangesAsync();
 
-            return true;
+            return creditCompany.Id;
         }
 
         public bool Exists(string id)

@@ -6,7 +6,7 @@ namespace Metomarket.Services.Data
 {
     public interface ICreditCompanyService
     {
-        Task<bool> CreateAsync(string name, DateTime activeSince);
+        Task<string> CreateAsync(string name, DateTime activeSince);
 
         IEnumerable<TModel> All<TModel>();
 

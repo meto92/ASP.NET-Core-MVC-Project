@@ -38,8 +38,8 @@ namespace Metomarket.Services.Data.Tests
         [InlineData(36)]
         public async Task CreateAsyncShouldNotThrownWhenPeriodInMonthsIsAtLeastOne(int period)
         {
-            var contractRepository = new Mock<IRepository<Contract>>();
-            var orderRepository = new Mock<IRepository<Order>>();
+            var contractRepository = Mock.Of<IRepository<Contract>>();
+            var orderRepository = Mock.Of<IRepository<Order>>();
             var creditCompanyService = new Mock<ICreditCompanyService>();
             var userService = new Mock<IUserService>();
 
@@ -49,8 +49,8 @@ namespace Metomarket.Services.Data.Tests
                 .Returns(Task.FromResult(true));
 
             IContractService contractService = new ContractService(
-                contractRepository.Object,
-                orderRepository.Object,
+                contractRepository,
+                orderRepository,
                 creditCompanyService.Object,
                 userService.Object);
 
@@ -60,8 +60,8 @@ namespace Metomarket.Services.Data.Tests
         [Fact]
         public void CreateAsyncShouldThrownWhenUserDoesntExist()
         {
-            var contractRepository = new Mock<IRepository<Contract>>();
-            var orderRepository = new Mock<IRepository<Order>>();
+            var contractRepository = Mock.Of<IRepository<Contract>>();
+            var orderRepository = Mock.Of<IRepository<Order>>();
             var creditCompanyService = new Mock<ICreditCompanyService>();
             var userService = new Mock<IUserService>();
 
@@ -71,8 +71,8 @@ namespace Metomarket.Services.Data.Tests
                 .Returns(Task.FromResult(false));
 
             IContractService contractService = new ContractService(
-                contractRepository.Object,
-                orderRepository.Object,
+                contractRepository,
+                orderRepository,
                 creditCompanyService.Object,
                 userService.Object);
 
@@ -85,8 +85,8 @@ namespace Metomarket.Services.Data.Tests
         [Fact]
         public void CreateAsyncShouldThrownWhenCreditCompanyDoesntExist()
         {
-            var contractRepository = new Mock<IRepository<Contract>>();
-            var orderRepository = new Mock<IRepository<Order>>();
+            var contractRepository = Mock.Of<IRepository<Contract>>();
+            var orderRepository = Mock.Of<IRepository<Order>>();
             var creditCompanyService = new Mock<ICreditCompanyService>();
             var userService = new Mock<IUserService>();
 
@@ -96,8 +96,8 @@ namespace Metomarket.Services.Data.Tests
                 .Returns(Task.FromResult(true));
 
             IContractService contractService = new ContractService(
-                contractRepository.Object,
-                orderRepository.Object,
+                contractRepository,
+                orderRepository,
                 creditCompanyService.Object,
                 userService.Object);
 
@@ -169,15 +169,15 @@ namespace Metomarket.Services.Data.Tests
             ApplicationDbContext dbContext = this.GetNewDbContext();
 
             var contractRepository = new EfRepository<Contract>(dbContext);
-            var orderRepository = new Mock<IRepository<Order>>();
-            var creditCompanyService = new Mock<ICreditCompanyService>();
-            var userService = new Mock<IUserService>();
+            var orderRepository = Mock.Of<IRepository<Order>>();
+            var creditCompanyService = Mock.Of<ICreditCompanyService>();
+            var userService = Mock.Of<IUserService>();
 
             IContractService contractService = new ContractService(
                 contractRepository,
-                orderRepository.Object,
-                creditCompanyService.Object,
-                userService.Object);
+                orderRepository,
+                creditCompanyService,
+                userService);
 
             const int count = 3;
 
@@ -193,16 +193,16 @@ namespace Metomarket.Services.Data.Tests
 
         private IContractService GetBaseContractService()
         {
-            var contractRepository = new Mock<IRepository<Contract>>();
-            var orderRepository = new Mock<IRepository<Order>>();
-            var creditCompanyService = new Mock<ICreditCompanyService>();
-            var userService = new Mock<IUserService>();
+            var contractRepository = Mock.Of<IRepository<Contract>>();
+            var orderRepository = Mock.Of<IRepository<Order>>();
+            var creditCompanyService = Mock.Of<ICreditCompanyService>();
+            var userService = Mock.Of<IUserService>();
 
             IContractService contractService = new ContractService(
-                contractRepository.Object,
-                orderRepository.Object,
-                creditCompanyService.Object,
-                userService.Object);
+                contractRepository,
+                orderRepository,
+                creditCompanyService,
+                userService);
 
             return contractService;
         }
