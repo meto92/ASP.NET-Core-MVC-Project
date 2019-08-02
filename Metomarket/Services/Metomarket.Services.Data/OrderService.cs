@@ -10,7 +10,7 @@ namespace Metomarket.Services.Data
     public class OrderService : IOrderService
     {
         private const string InvalidQuantityMessage = "Quantity must be greater than zero.";
-        private const string OrderNotFoundMessage = "Order with id {0} could not be found.";
+        private const string OrderNotFoundMessage = "Order with ID '{0}' could not be found.";
         private const string UnauthorizedToDeleteOrderMessage = "You don't have permission to delete this order.";
 
         private readonly IDeletableEntityRepository<Order> orderRepository;

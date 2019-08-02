@@ -18,7 +18,7 @@ namespace Metomarket.Services.Data.Tests
     public class CreditCompanyServiceTests
     {
         [Fact]
-        public void CreateAsyncShouldThrowIfNameIsAlreadyTaken()
+        public async Task CreateAsyncShouldThrowIfNameIsAlreadyTaken()
         {
             const string name = "name";
 
@@ -35,7 +35,7 @@ namespace Metomarket.Services.Data.Tests
 
             ICreditCompanyService creditCompanyService = new CreditCompanyService(creditCompanyRepository);
 
-            Assert.ThrowsAsync<ServiceException>(async () =>
+            await Assert.ThrowsAsync<ServiceException>(async () =>
             {
                 await creditCompanyService.CreateAsync(name, DateTime.Now.AddDays(-1));
             });

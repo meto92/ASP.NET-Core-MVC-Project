@@ -58,7 +58,7 @@ namespace Metomarket.Services.Data.Tests
         }
 
         [Fact]
-        public void CreateAsyncShouldThrownWhenUserDoesntExist()
+        public async Task CreateAsyncShouldThrownWhenUserDoesntExist()
         {
             var contractRepository = Mock.Of<IRepository<Contract>>();
             var orderRepository = Mock.Of<IRepository<Order>>();
@@ -76,14 +76,14 @@ namespace Metomarket.Services.Data.Tests
                 creditCompanyService.Object,
                 userService.Object);
 
-            Assert.ThrowsAsync<ServiceException>(async () =>
+            await Assert.ThrowsAsync<ServiceException>(async () =>
             {
                 await contractService.CreateAsync(string.Empty, string.Empty, new string[0], 1, string.Empty, 1);
             });
         }
 
         [Fact]
-        public void CreateAsyncShouldThrownWhenCreditCompanyDoesntExist()
+        public async Task CreateAsyncShouldThrownWhenCreditCompanyDoesntExist()
         {
             var contractRepository = Mock.Of<IRepository<Contract>>();
             var orderRepository = Mock.Of<IRepository<Order>>();
@@ -101,7 +101,7 @@ namespace Metomarket.Services.Data.Tests
                 creditCompanyService.Object,
                 userService.Object);
 
-            Assert.ThrowsAsync<ServiceException>(async () =>
+            await Assert.ThrowsAsync<ServiceException>(async () =>
             {
                 await contractService.CreateAsync(string.Empty, string.Empty, new string[0], 1, string.Empty, 1);
             });
