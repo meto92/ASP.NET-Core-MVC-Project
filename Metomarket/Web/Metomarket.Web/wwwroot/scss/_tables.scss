@@ -1,0 +1,4 @@
+﻿@include responsive-table(".admin-users-index", ["Username", "Email", "Action"]);
+@include responsive-table(".credit-companies-index", ["Company Name", "Contracts Count"]);
+@include responsive-table(".dashboard-index", ["Entity", "Count"]);
+@include responsive-table(".product-types-index", ["Product Type", "Products Count", "Action"]);

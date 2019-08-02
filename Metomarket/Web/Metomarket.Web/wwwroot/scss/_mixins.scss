@@ -15,3 +15,35 @@
         @content;
     }
 }
+
+@mixin responsive-table($container, $headers) {
+    $count: length($headers);
+
+    #{$container} {
+        @include mq-max-w ($breakpoint-md - 1px) {
+            table > thead {
+                display: none;
+            }
+
+            table td {
+                display: block;
+                width: 100%;
+
+                &::before {
+                    padding-right: 1em;
+                    font-weight: bold;
+                }
+
+                @for $i from 1 through $count - 1 {
+                    &:nth-child(#{$count}n - #{$count - $i})::before {
+                        content: "#{nth($headers, $i)}:";
+                    }
+                }
+
+                &:nth-child(#{$count}n)::before {
+                    content: "#{nth($headers, $count)}:";
+                }
+            }
+        }
+    }
+}

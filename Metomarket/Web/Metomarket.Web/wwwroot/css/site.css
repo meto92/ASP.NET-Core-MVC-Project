@@ -265,18 +265,19 @@ body {
   max-width: 40rem; }
 
 @media screen and (max-width: 767px) {
-  .product-types-index table > thead {
+  .admin-users-index table > thead {
     display: none; }
-  .product-types-index table td {
+  .admin-users-index table td {
     display: block;
     width: 100%; }
-    .product-types-index table td::before {
-      padding-right: 1em; }
-    .product-types-index table td:nth-child(3n - 1)::before {
-      content: "Product Type:"; }
-    .product-types-index table td:nth-child(3n - 2)::before {
-      content: "Products Count:"; }
-    .product-types-index table td:nth-child(3n)::before {
+    .admin-users-index table td::before {
+      padding-right: 1em;
+      font-weight: bold; }
+    .admin-users-index table td:nth-child(3n - 2)::before {
+      content: "Username:"; }
+    .admin-users-index table td:nth-child(3n - 1)::before {
+      content: "Email:"; }
+    .admin-users-index table td:nth-child(3n)::before {
       content: "Action:"; } }
 
 @media screen and (max-width: 767px) {
@@ -294,33 +295,34 @@ body {
       content: "Contracts Count:"; } }
 
 @media screen and (max-width: 767px) {
-  .admin-users-index table > thead {
-    display: none; }
-  .admin-users-index table td {
-    display: block;
-    width: 100%; }
-    .admin-users-index table td::before {
-      padding-right: 1em;
-      font-weight: bold; }
-    .admin-users-index table td:nth-child(3n - 2)::before {
-      content: "Username:"; }
-    .admin-users-index table td:nth-child(3n - 1)::before {
-      content: "Email:"; }
-    .admin-users-index table td:nth-child(3n)::before {
-      content: "Action:"; } }
-
-@media screen and (max-width: 767px) {
   .dashboard-index table > thead {
     display: none; }
   .dashboard-index table td {
     display: block;
     width: 100%; }
     .dashboard-index table td::before {
-      padding-right: 1em; }
+      padding-right: 1em;
+      font-weight: bold; }
     .dashboard-index table td:nth-child(2n - 1)::before {
       content: "Entity:"; }
     .dashboard-index table td:nth-child(2n)::before {
       content: "Count:"; } }
+
+@media screen and (max-width: 767px) {
+  .product-types-index table > thead {
+    display: none; }
+  .product-types-index table td {
+    display: block;
+    width: 100%; }
+    .product-types-index table td::before {
+      padding-right: 1em;
+      font-weight: bold; }
+    .product-types-index table td:nth-child(3n - 2)::before {
+      content: "Product Type:"; }
+    .product-types-index table td:nth-child(3n - 1)::before {
+      content: "Products Count:"; }
+    .product-types-index table td:nth-child(3n)::before {
+      content: "Action:"; } }
 
 .search-wrapper {
   height: 2.75rem;
