@@ -89,7 +89,7 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
         public async Task<IActionResult> Delete(string id)
         {
-            await this.productService.Delete(id);
+            await this.productService.DeleteAsync(id);
 
             return this.RedirectToHome();
         }

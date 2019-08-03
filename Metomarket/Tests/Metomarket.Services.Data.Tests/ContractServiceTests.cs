@@ -115,7 +115,7 @@ namespace Metomarket.Services.Data.Tests
             Order order1 = dbContext.Orders.Add(new Order()).Entity;
             Order order2 = dbContext.Orders.Add(new Order()).Entity;
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             const string userId = "userId";
             const string creditCompanyId = "ccId";
@@ -164,8 +164,10 @@ namespace Metomarket.Services.Data.Tests
         }
 
         [Fact]
-        public void GetCountShouldReturnCorrectCount()
+        public async Task GetCountShouldReturnCorrectCount()
         {
+            const int count = 3;
+
             ApplicationDbContext dbContext = this.GetNewDbContext();
 
             var contractRepository = new EfRepository<Contract>(dbContext);
@@ -179,14 +181,12 @@ namespace Metomarket.Services.Data.Tests
                 creditCompanyService,
                 userService);
 
-            const int count = 3;
-
             for (int i = 0; i < count; i++)
             {
                 dbContext.Contracts.Add(new Contract());
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             Assert.Equal(count, contractService.GetCount());
         }

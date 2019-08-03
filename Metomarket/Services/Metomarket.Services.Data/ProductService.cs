@@ -11,7 +11,8 @@ namespace Metomarket.Services.Data
 {
     public class ProductService : IProductService
     {
-        private const string ProductNotFoundMessage = "Product with id {0} could not be found.";
+        private const string ProductNotFoundMessage = "Product with ID '{0}' could not be found.";
+        private const string QuantityToAddCannotBeNegativeMessage = "Quantity to add cannot be less than 0.";
         private const string ProductTypeNotFoundMessage = "Product type with id {0} could not be found.";
         private const string InsufficientProductQuantityMessage = "Sorry. We don't have the requested quantity.";
 
@@ -28,6 +29,11 @@ namespace Metomarket.Services.Data
 
         public async Task<bool> AddQuantityAsync(string id, int quantity)
         {
+            if (quantity < 0)
+            {
+                throw new ServiceException(QuantityToAddCannotBeNegativeMessage);
+            }
+
             Product product = this.productRepository.All()
                 .Where(p => p.Id == id)
                 .FirstOrDefault();
@@ -82,7 +88,7 @@ namespace Metomarket.Services.Data
             return product.Id;
         }
 
-        public async Task<bool> Delete(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             Product product = this.productRepository.All()
                 .Where(p => p.Id == id)
@@ -91,11 +97,6 @@ namespace Metomarket.Services.Data
             if (product == null)
             {
                 this.ThrowWithNotFoundMessage(id);
-            }
-
-            if (product.IsDeleted)
-            {
-                return false;
             }
 
             this.productRepository.Delete(product);

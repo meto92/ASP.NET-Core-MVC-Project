@@ -29,7 +29,7 @@ namespace Metomarket.Services.Data.Tests
                 Name = name,
             });
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             var creditCompanyRepository = Mock.Of<IRepository<CreditCompany>>();
 
@@ -77,12 +77,12 @@ namespace Metomarket.Services.Data.Tests
         }
 
         [Fact]
-        public void ExistsShouldReturnTrueWhenEntityWithTheGivenIdIsPresentedInDatabase()
+        public async Task ExistsShouldReturnTrueWhenEntityWithTheGivenIdIsPresentedInDatabase()
         {
-            ApplicationDbContext dbContext = this.GetNewDbContext();
-
             const string id = "123";
             const string name = "name";
+
+            ApplicationDbContext dbContext = this.GetNewDbContext();
 
             dbContext.CreditCompanies.Add(new CreditCompany
             {
@@ -90,7 +90,7 @@ namespace Metomarket.Services.Data.Tests
                 Name = name,
             });
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             var creditCompanyRepository = new EfRepository<CreditCompany>(dbContext);
 
@@ -100,22 +100,22 @@ namespace Metomarket.Services.Data.Tests
         }
 
         [Fact]
-        public void GetCountShouldReturnCorrectCount()
+        public async Task GetCountShouldReturnCorrectCount()
         {
+            const int count = 3;
+
             ApplicationDbContext dbContext = this.GetNewDbContext();
 
             var creditCompanyRepository = new EfRepository<CreditCompany>(dbContext);
 
             ICreditCompanyService creditCompanyService = new CreditCompanyService(creditCompanyRepository);
 
-            const int count = 3;
-
             for (int i = 0; i < count; i++)
             {
                 dbContext.CreditCompanies.Add(new CreditCompany());
             }
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             Assert.Equal(count, creditCompanyService.GetCount());
         }

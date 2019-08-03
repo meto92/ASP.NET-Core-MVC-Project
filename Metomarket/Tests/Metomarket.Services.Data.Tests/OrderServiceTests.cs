@@ -47,6 +47,7 @@ namespace Metomarket.Services.Data.Tests
 
             Assert.False(await orderService.CompleteOrdersAsync(new[] { order1.Id, order2.Id }));
             Assert.False(order1.IsCompleted);
+            Assert.True(order2.IsCompleted);
         }
 
         [Fact]
@@ -177,48 +178,18 @@ namespace Metomarket.Services.Data.Tests
             });
         }
 
-        [Fact]
-        public async Task DeleteAsyncShouldThrowIfUserIsNotAdminAndIssuer()
-        {
-            var orderRepository = new Mock<IDeletableEntityRepository<Order>>();
-            var productService = Mock.Of<IProductService>();
-            var userService = new Mock<IUserService>();
-
-            orderRepository.Setup(op => op.All())
-                .Returns(new Order[]
-                {
-                    new Order
-                    {
-                        Id = nameof(Order.Id),
-                        IssuerId = string.Empty,
-                    },
-                }
-                .AsQueryable);
-            userService.Setup(us => us.IsAdminAsync(nameof(Order.IssuerId)))
-                .Returns(Task.FromResult(false));
-
-            IOrderService orderService = new OrderService(
-                orderRepository.Object,
-                productService,
-                userService.Object);
-
-            await Assert.ThrowsAsync<ServiceException>(async () =>
-            {
-                await orderService.DeleteAsync(nameof(Order.Id), nameof(Order.IssuerId));
-            });
-        }
-
         [Theory]
-        [InlineData(false, true)]
-        [InlineData(true, false)]
         [InlineData(true, true)]
-        public async Task DeleteAsyncShouldNotThrowIfUserIsAdminOrIssuer(bool isIssuer, bool isAdmin)
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        [InlineData(false, false, true)]
+        public async Task DeleteAsyncShouldNotThrowIfUserIsAdminOrIssuer(bool isIssuer, bool isAdmin, bool shouldThrow = false)
         {
             var orderRepository = new Mock<IDeletableEntityRepository<Order>>();
             var productService = Mock.Of<IProductService>();
             var userService = new Mock<IUserService>();
 
-            orderRepository.Setup(op => op.All())
+            orderRepository.Setup(or => or.All())
                 .Returns(new Order[]
                 {
                     new Order
@@ -236,7 +207,22 @@ namespace Metomarket.Services.Data.Tests
                 productService,
                 userService.Object);
 
-            await orderService.DeleteAsync(nameof(Order.Id), nameof(Order.IssuerId));
+            Task task = Task.Run(async () =>
+            {
+                await orderService.DeleteAsync(nameof(Order.Id), nameof(Order.IssuerId));
+            });
+
+            if (shouldThrow)
+            {
+                await Assert.ThrowsAsync<ServiceException>(async () =>
+                {
+                    await task;
+                });
+            }
+            else
+            {
+                await task;
+            }
         }
 
         [Fact]
@@ -275,6 +261,8 @@ namespace Metomarket.Services.Data.Tests
         [Fact]
         public async Task GetCountShouldReturnCorrectCount()
         {
+            const int count = 5;
+
             ApplicationDbContext dbContext = this.GetNewDbContext();
 
             var orderRepository = new EfDeletableEntityRepository<Order>(dbContext);
@@ -285,8 +273,6 @@ namespace Metomarket.Services.Data.Tests
                 orderRepository,
                 productService,
                 userService);
-
-            const int count = 5;
 
             for (int i = 0; i < count; i++)
             {
