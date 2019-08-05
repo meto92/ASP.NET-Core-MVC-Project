@@ -12,7 +12,7 @@ namespace Metomarket.Web.Areas.CreditCompanies.Controllers
 {
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     [Area("CreditCompanies")]
-    [Route("{area}/{action}/{id?}")]
+    [Route("[area]/[action]/{id?}")]
     public class CreditCompaniesController : BaseController
     {
         private readonly ICreditCompanyService creditCompanyService;

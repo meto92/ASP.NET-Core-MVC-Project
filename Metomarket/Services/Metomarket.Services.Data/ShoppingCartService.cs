@@ -15,13 +15,16 @@ namespace Metomarket.Services.Data
 
         private readonly IRepository<ShoppingCart> shoppingCartRepository;
         private readonly IRepository<Order> orderRepository;
+        private readonly IProductService productService;
 
         public ShoppingCartService(
             IRepository<ShoppingCart> shoppingCartRepository,
-            IRepository<Order> orderRepository)
+            IRepository<Order> orderRepository,
+            IProductService productService)
         {
             this.shoppingCartRepository = shoppingCartRepository;
             this.orderRepository = orderRepository;
+            this.productService = productService;
         }
 
         public async Task<bool> AddOrderAsync(string userId, string orderId)
@@ -51,7 +54,7 @@ namespace Metomarket.Services.Data
             return true;
         }
 
-        public async Task<bool> EmptyCartAsync(string userId)
+        public async Task<bool> EmptyCartAsync(string userId, bool restoreProductQuantities = false)
         {
             ShoppingCart shoppingCart = this.shoppingCartRepository.All()
                 .Include(sc => sc.Orders)
@@ -61,6 +64,15 @@ namespace Metomarket.Services.Data
             if (shoppingCart == null)
             {
                 throw new ServiceException();
+            }
+
+            if (restoreProductQuantities)
+            {
+                foreach (Order order in shoppingCart.Orders)
+                {
+                    await this.productService
+                        .AddQuantityAsync(order.ProductId, order.Quantity);
+                }
             }
 
             shoppingCart.Orders.Clear();

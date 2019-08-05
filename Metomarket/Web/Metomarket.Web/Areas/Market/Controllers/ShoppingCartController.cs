@@ -107,7 +107,7 @@ namespace Metomarket.Web.Areas.Market.Controllers
         {
             string userId = this.GetUserId();
 
-            await this.shoppingCartService.EmptyCartAsync(userId);
+            await this.shoppingCartService.EmptyCartAsync(userId, true);
 
             return this.RedirectToAction(nameof(this.Index));
         }

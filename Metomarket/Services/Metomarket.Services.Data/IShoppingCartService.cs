@@ -8,6 +8,6 @@ namespace Metomarket.Services.Data
 
         TModel FindByUserId<TModel>(string userId);
 
-        Task<bool> EmptyCartAsync(string userId);
+        Task<bool> EmptyCartAsync(string userId, bool restoreProductQuantities = false);
     }
 }
