@@ -43,13 +43,6 @@ namespace Metomarket.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Demote(string id)
         {
-            bool exists = await this.userService.ExistsAsync(id);
-
-            if (!exists)
-            {
-                return this.RedirectToIndex();
-            }
-
             UserViewModel user = await this.userService.FindByIdAsync<UserViewModel>(id);
 
             bool isRootAdmin = user.Username == GlobalConstants.RootAdministratorUsername

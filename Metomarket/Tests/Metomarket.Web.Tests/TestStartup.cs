@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Metomarket.Data.Models;
+using Metomarket.Web.Tests.Mocks;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using MyTested.AspNetCore.Mvc;
@@ -17,6 +21,7 @@ namespace Metomarket.Web.Tests
             base.ConfigureServices(services);
 
             services.ReplaceDbContext();
+            services.ReplaceScoped<UserManager<ApplicationUser>, UserManagerMock<ApplicationUser>>();
         }
     }
 }

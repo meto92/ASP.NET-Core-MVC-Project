@@ -27,7 +27,7 @@ namespace Metomarket.Web.Areas.CreditCompanies.Controllers
             CreditCompaniesListIndexViewModel model = new CreditCompaniesListIndexViewModel
             {
                 CreditCompanies = this.creditCompanyService
-                .All<CreditCompanyIndexViewModel>(),
+                    .All<CreditCompanyIndexViewModel>(),
             };
 
             return this.View(model);

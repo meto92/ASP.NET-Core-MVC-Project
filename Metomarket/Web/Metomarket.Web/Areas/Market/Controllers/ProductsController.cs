@@ -46,14 +46,14 @@ namespace Metomarket.Web.Areas.Market.Controllers
                 return this.View(model);
             }
 
-            await this.productService.CreateAsync(
+            string id = await this.productService.CreateAsync(
                 model.Name,
                 model.Price,
                 model.ImageUrl,
                 model.InStock,
                 model.TypeId);
 
-            return this.RedirectToHome();
+            return this.RedirectToAction(nameof(this.Details), new { id });
         }
 
         public IActionResult Details(string id)
@@ -76,6 +76,11 @@ namespace Metomarket.Web.Areas.Market.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ProductEditModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction(nameof(this.Edit), new { id = model.Id });
+            }
+
             await this.productService.UpdateAsync(
                 model.Id,
                 model.Name,

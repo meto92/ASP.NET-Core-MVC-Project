@@ -1,6 +1,6 @@
-﻿namespace Metomarket.Web.Areas.Administration.ViewModels.Dashboard
+﻿namespace Metomarket.Web.ViewModels.Dashboard
 {
-    public class IndexViewModel
+    public class DashboardIndexViewModel
     {
         public int ContractsCount { get; set; }
 

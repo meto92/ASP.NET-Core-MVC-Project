@@ -36,7 +36,9 @@ namespace Metomarket.Services.Data
 
             if (user == null)
             {
-                return false;
+                throw new ServiceException(string.Format(
+                    UserNotFoundMessage,
+                    userId));
             }
 
             bool isAlreadyAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
@@ -46,7 +48,9 @@ namespace Metomarket.Services.Data
                 return false;
             }
 
-            await this.userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            await this.userManager.AddToRoleAsync(
+                user,
+                GlobalConstants.AdministratorRoleName);
 
             return true;
         }
@@ -57,7 +61,9 @@ namespace Metomarket.Services.Data
 
             if (user == null)
             {
-                return false;
+                throw new ServiceException(string.Format(
+                     UserNotFoundMessage,
+                     userId));
             }
 
             bool isAdmin = await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName);
@@ -76,7 +82,18 @@ namespace Metomarket.Services.Data
             => this.userManager.Users.To<TModel>().ToArray();
 
         public async Task<TModel> FindByIdAsync<TModel>(string userId)
-            => Mapper.Map<TModel>(await this.userManager.FindByIdAsync(userId));
+        {
+            TModel model = Mapper.Map<TModel>(await this.userManager.FindByIdAsync(userId));
+
+            if (model == null)
+            {
+                throw new ServiceException(string.Format(
+                    UserNotFoundMessage,
+                    userId));
+            }
+
+            return model;
+        }
 
         public async Task<bool> IsAdminAsync(string userId)
         {

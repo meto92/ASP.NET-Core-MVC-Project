@@ -64,7 +64,11 @@ namespace Metomarket.Web
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
             services
-                .AddMvc(options => options.Filters.Add(typeof(ExceptionFilter)))
+                .AddMvc(options =>
+                {
+                    options.Filters.Add(typeof(ExceptionFilter));
+                    options.Filters.Add(typeof(AutoValidateAntiforgeryTokenAttribute));
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {

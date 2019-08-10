@@ -1,5 +1,5 @@
 ﻿using Metomarket.Services.Data;
-using Metomarket.Web.Areas.Administration.ViewModels.Dashboard;
+using Metomarket.Web.ViewModels.Dashboard;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +29,7 @@ namespace Metomarket.Web.Areas.Administration.Controllers
 
         public IActionResult Index()
         {
-            IndexViewModel model = new IndexViewModel
+            DashboardIndexViewModel model = new DashboardIndexViewModel
             {
                 ContractsCount = this.contractService.GetCount(),
                 OrdersCount = this.orderService.GetCount(),
