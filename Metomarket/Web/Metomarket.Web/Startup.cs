@@ -10,6 +10,7 @@ using Metomarket.Services.Data;
 using Metomarket.Services.Mapping;
 using Metomarket.Services.Messaging;
 using Metomarket.Services.Messaging.SendGrid;
+using Metomarket.Web.Hubs;
 using Metomarket.Web.Infrastructure.ComponentViewModels.ProductTypes;
 using Metomarket.Web.Infrastructure.Filters;
 using Metomarket.Web.ViewModels;
@@ -69,6 +70,8 @@ namespace Metomarket.Web
                     facebookOptions.AppId = this.configuration["Authentication:Facebook:AppId"];
                     facebookOptions.AppSecret = this.configuration["Authentication:Facebook:AppSecret"];
                 });
+
+            services.AddSignalR();
 
             services
                 .AddMvc(options =>
@@ -166,6 +169,11 @@ namespace Metomarket.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<DashboardHub>("/dashboard");
+            });
 
             app.UseMvc(routes =>
             {

@@ -16,7 +16,7 @@
             <tbody>
                 <tr>
                     <td>Contract</td>
-                    <td>@Model.ContractsCount</td>
+                    <td id="contractsCount">@Model.ContractsCount</td>
                 </tr>
                 <tr>
                     <td>Order</td>
@@ -32,9 +32,16 @@
                 </tr>
                 <tr>
                     <td>User</td>
-                    <td>@Model.UsersCount</td>
+                    <td id="usersCount">@Model.UsersCount</td>
                 </tr>
             </tbody>
         </table>
+
+        <div class="alerts col-md-8 mx-auto"></div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/dashboard.js"></script>
+}

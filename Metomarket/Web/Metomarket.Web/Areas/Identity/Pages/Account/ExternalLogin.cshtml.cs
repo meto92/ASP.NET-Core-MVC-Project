@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 
 using Metomarket.Common;
 using Metomarket.Data.Models;
+using Metomarket.Web.Hubs;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace Metomarket.Web.Areas.Identity.Pages.Account
@@ -32,15 +34,18 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<ExternalLoginModel> logger;
+        private readonly IHubContext<DashboardHub> dashboardHubContext;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            ILogger<ExternalLoginModel> logger)
+            ILogger<ExternalLoginModel> logger,
+            IHubContext<DashboardHub> dashboardHubContext)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.logger = logger;
+            this.dashboardHubContext = dashboardHubContext;
         }
 
         [BindProperty]
@@ -162,6 +167,9 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                         this.logger.LogInformation(
                             UserCreatedAccountLogMessage,
                             info.LoginProvider);
+
+                        await this.dashboardHubContext.Clients.All
+                            .SendAsync(DashboardHub.UserRegisteredMethodName);
 
                         return this.LocalRedirect(returnUrl);
                     }

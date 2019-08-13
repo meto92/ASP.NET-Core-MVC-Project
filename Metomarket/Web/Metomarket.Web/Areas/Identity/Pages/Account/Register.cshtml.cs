@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 
 using Metomarket.Common;
 using Metomarket.Data.Models;
+using Metomarket.Web.Hubs;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace Metomarket.Web.Areas.Identity.Pages.Account
@@ -29,17 +31,20 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ILogger<RegisterModel> logger;
         private readonly IEmailSender emailSender;
+        private readonly IHubContext<DashboardHub> dashboardHubContext;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IHubContext<DashboardHub> dashboardHubContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.emailSender = emailSender;
+            this.dashboardHubContext = dashboardHubContext;
         }
 
         [BindProperty]
@@ -89,6 +94,9 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
                             HtmlEncoder.Default.Encode(callbackUrl)));
 
                     await this.signInManager.SignInAsync(user, isPersistent: false);
+
+                    await this.dashboardHubContext.Clients.All
+                        .SendAsync(DashboardHub.UserRegisteredMethodName);
 
                     return this.LocalRedirect(returnUrl);
                 }

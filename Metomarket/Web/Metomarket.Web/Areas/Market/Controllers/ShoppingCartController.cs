@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 
 using Metomarket.Data.Models;
 using Metomarket.Services.Data;
+using Metomarket.Web.Hubs;
 using Metomarket.Web.ViewModels.ShoppingCarts;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Metomarket.Web.Areas.Market.Controllers
 {
@@ -22,17 +24,20 @@ namespace Metomarket.Web.Areas.Market.Controllers
         private readonly IOrderService orderService;
         private readonly IContractService contractService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IHubContext<DashboardHub> dashboardHubContext;
 
         public ShoppingCartController(
             IShoppingCartService shoppingCartService,
             IOrderService orderService,
             IContractService contractService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHubContext<DashboardHub> dashboardHubContext)
         {
             this.shoppingCartService = shoppingCartService;
             this.orderService = orderService;
             this.contractService = contractService;
             this.userManager = userManager;
+            this.dashboardHubContext = dashboardHubContext;
         }
 
         public IActionResult Index()
@@ -103,6 +108,9 @@ namespace Metomarket.Web.Areas.Market.Controllers
 
             await this.orderService.CompleteOrdersAsync(orderIds);
             await this.shoppingCartService.EmptyCartAsync(userId);
+
+            await this.dashboardHubContext.Clients.All
+                .SendAsync(DashboardHub.ContractCreatedMethodName);
 
             return this.RedirectToHome();
         }
