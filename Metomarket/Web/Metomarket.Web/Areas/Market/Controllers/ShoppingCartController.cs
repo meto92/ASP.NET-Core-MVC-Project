@@ -15,6 +15,9 @@ namespace Metomarket.Web.Areas.Market.Controllers
     [Authorize]
     public class ShoppingCartController : MarketController
     {
+        private const string TempDataErrorKey = "Error";
+        private const string CompleteOrdersErrorMessage = "Invalid data. Check your credit card number.";
+
         private readonly IShoppingCartService shoppingCartService;
         private readonly IOrderService orderService;
         private readonly IContractService contractService;
@@ -77,6 +80,8 @@ namespace Metomarket.Web.Areas.Market.Controllers
         {
             if (!this.ModelState.IsValid)
             {
+                this.TempData[TempDataErrorKey] = CompleteOrdersErrorMessage;
+
                 return this.RedirectToAction(nameof(this.CompleteOrders));
             }
 

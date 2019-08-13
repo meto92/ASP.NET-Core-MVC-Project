@@ -8,6 +8,8 @@
 
 <section class="mt-4 mw-30r mx-auto">
     <form asp-action="ConfirmOrders" class="form">
+        <span class="text-danger d-inline-block">@this.TempData["Error"]</span>
+
         <div class="form-group">
             <label asp-for="Total"></label>
             <label class="input-wrapper">
@@ -30,21 +32,16 @@
                 <input type="radio" name="@nameof(Model.PeriodInMonths)" value="3" checked />
                 <span class="circle"></span>
             </label>
-            <label class="radio d-block">
-                6 months
-                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="6" />
-                <span class="circle"></span>
-            </label>
-            <label class="radio d-block">
-                12 months
-                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="12" />
-                <span class="circle"></span>
-            </label>
-            <label class="radio d-block">
-                24 months
-                <input type="radio" name="@nameof(Model.PeriodInMonths)" value="24" />
-                <span class="circle"></span>
-            </label>
+            
+            @for (int monthsCount = 6; monthsCount <= 24; monthsCount *= 2)
+            {
+                <label class="radio d-block">
+                    @monthsCount months
+                    <input type="radio" name="@nameof(Model.PeriodInMonths)" value="@monthsCount" />
+                    <span class="circle"></span>
+                </label>
+            }
+
             <span asp-validation-for="PeriodInMonths" class="text-danger"></span>
         </div>
 
@@ -58,8 +55,10 @@
         <div class="form-group">
             <label asp-for="CreditCompanyId"></label>
             <select asp-for="CreditCompanyId">
-                @*<vc:CreditCompanySelectOptions></vc:CreditCompanySelectOptions>*@
-                @await Component.InvokeAsync("CreditCompanySelectOptions")
+                <cache expires-after="TimeSpan.FromMinutes(2)">
+                    @*<vc:CreditCompanySelectOptions></vc:CreditCompanySelectOptions>*@
+                    @await Component.InvokeAsync("CreditCompanySelectOptions")
+                </cache>
             </select>
             <span asp-validation-for="CreditCompanyId" class="text-danger"></span>
         </div>
