@@ -24,6 +24,8 @@
 
         public const int UserLastNameMaxLength = 25;
 
+        public const int UserAddressMinLength = 10;
+
         public const int UserAddressMaxLength = 100;
 
         public const int ProductNameMinLength = 2;

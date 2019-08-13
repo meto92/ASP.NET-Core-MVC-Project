@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -139,12 +140,22 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
             if (this.ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = this.Input.Username,
+                    Email = this.Input.Email,
+                    FirstName = this.Input.FirstName,
+                    LastName = this.Input.LastName,
+                    Address = this.Input.Address,
+                    PhoneNumber = this.Input.PhoneNumber,
+                };
+
                 var result = await this.userManager.CreateAsync(user);
 
                 if (result.Succeeded)
                 {
                     result = await this.userManager.AddLoginAsync(user, info);
+
                     if (result.Succeeded)
                     {
                         await this.signInManager.SignInAsync(user, isPersistent: false);
@@ -170,9 +181,37 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            private const int UsernameMinLength = GlobalConstants.UsernameMinLength;
+            private const int UsernameMaxLength = GlobalConstants.UsernameMaxLength;
+            private const int AddressMinLength = GlobalConstants.UserAddressMinLength;
+            private const int AddressMaxLength = GlobalConstants.UserAddressMaxLength;
+            private const int FirstNameMaxLength = GlobalConstants.UserFirstNameMaxLength;
+            private const string FirstNameDisplayName = "First name";
+            private const int LastNameMaxLength = GlobalConstants.UserLastNameMaxLength;
+            private const string LastNameDisplayName = "Last name";
+
+            [Required]
+            [StringLength(UsernameMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = UsernameMinLength)]
+            public string Username { get; set; }
+
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [StringLength(AddressMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = AddressMinLength)]
+            public string Address { get; set; }
+
+            [StringLength(FirstNameMaxLength)]
+            [Display(Name = FirstNameDisplayName)]
+            public string FirstName { get; set; }
+
+            [StringLength(LastNameMaxLength)]
+            [Display(Name = LastNameDisplayName)]
+            public string LastName { get; set; }
+
+            [Phone]
+            public string PhoneNumber { get; set; }
         }
     }
 }

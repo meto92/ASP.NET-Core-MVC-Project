@@ -14,19 +14,63 @@
     logging in.
 </p>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <label class="input-wrapper with-icon">
-                    <input asp-for="Input.Email" placeholder="Email . . ." />
-                    <i class="far fa-envelope"></i>
-                </label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
+<section>
+    <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form mw-30r mx-auto">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Input.Email"></label>
+            <label class="input-wrapper with-icon">
+                <input asp-for="Input.Email" placeholder="Email . . ." />
+                <i class="far fa-envelope"></i>
+            </label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Username"></label>
+            <label class="input-wrapper with-icon">
+                <input asp-for="Input.Username" placeholder="Username . . ." />
+                <i class="far fa-user"></i>
+            </label>
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Address"></label>
+            <label class="input-wrapper">
+                <input asp-for="Input.Address" placeholder="Address . . ." />
+            </label>
+            <span asp-validation-for="Input.Address" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.FirstName"></label>
+            <label class="input-wrapper">
+                <input asp-for="Input.FirstName" placeholder="First name (optional)" />
+            </label>
+            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.LastName"></label>
+            <label class="input-wrapper">
+                <input asp-for="Input.LastName" placeholder="Last name (optional)" />
+            </label>
+            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.PhoneNumber"></label>
+            <label class="input-wrapper with-icon">
+                <input asp-for="Input.PhoneNumber" placeholder="Phone number (optional)" />
+                <i class="fas fa-phone"></i>
+            </label>
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="text-center">
             <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-    </div>
-</div>
+        </div>
+    </form>
+</section>

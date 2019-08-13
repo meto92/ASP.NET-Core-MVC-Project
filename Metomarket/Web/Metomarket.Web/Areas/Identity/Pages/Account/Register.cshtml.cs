@@ -107,7 +107,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
         {
             private const int UsernameMinLength = GlobalConstants.UsernameMinLength;
             private const int UsernameMaxLength = GlobalConstants.UsernameMaxLength;
-            private const int AddressMinLength = 10;
+            private const int AddressMinLength = GlobalConstants.UserAddressMinLength;
             private const int AddressMaxLength = GlobalConstants.UserAddressMaxLength;
             private const int FirstNameMaxLength = GlobalConstants.UserFirstNameMaxLength;
             private const string FirstNameDisplayName = "First name";
