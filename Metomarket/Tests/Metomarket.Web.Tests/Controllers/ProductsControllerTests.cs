@@ -11,7 +11,7 @@ using MyTested.AspNetCore.Mvc;
 
 using Xunit;
 
-namespace Metomarket.Web.Tests.Controlers
+namespace Metomarket.Web.Tests.Controllers
 {
     public class ProductsControllerTests
     {
