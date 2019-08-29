@@ -39,5 +39,7 @@
         public const int ProductTypeNameMaxLength = 20;
 
         public const int CreditCompanyNameMaxLength = 25;
+
+        public const int CacheExpirationMinutes = 2;
     }
 }

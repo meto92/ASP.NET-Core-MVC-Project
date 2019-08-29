@@ -1,4 +1,5 @@
 ﻿@model Metomarket.Web.ViewModels.ShoppingCarts.CompleteOrdersModel
+@using Metomarket.Common
 
 @{
     ViewData["Title"] = "Complete Orders";
@@ -55,9 +56,10 @@
         <div class="form-group">
             <label asp-for="CreditCompanyId"></label>
             <select asp-for="CreditCompanyId">
-                <cache expires-after="TimeSpan.FromMinutes(2)">
-                    @*<vc:CreditCompanySelectOptions></vc:CreditCompanySelectOptions>*@
-                    @await Component.InvokeAsync("CreditCompanySelectOptions")
+                <cache expires-after="TimeSpan.FromMinutes(GlobalConstants.CacheExpirationMinutes)">
+                    <cache expires-after="TimeSpan.FromMinutes(2)">
+                        <vc:credit-company-select-options></vc:credit-company-select-options>
+                    </cache>
                 </cache>
             </select>
             <span asp-validation-for="CreditCompanyId" class="text-danger"></span>

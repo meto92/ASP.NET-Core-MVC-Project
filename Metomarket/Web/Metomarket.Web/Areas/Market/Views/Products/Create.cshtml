@@ -1,4 +1,5 @@
 ﻿@model Metomarket.Web.ViewModels.Products.ProductCreateInputModel
+@using Metomarket.Common
 
 @{
     ViewData["Title"] = "Create Product";
@@ -49,8 +50,9 @@
         <div class="form-group">
             <label asp-for="TypeId"></label>
             <select asp-for="TypeId">
-                @*<vc:ProductTypeSelectOptions></vc:ProductTypeSelectOptions>*@
-                @await Component.InvokeAsync("ProductTypeSelectOptions")
+                <cache expires-after="TimeSpan.FromMinutes(GlobalConstants.CacheExpirationMinutes)">
+                    <vc:product-type-select-options></vc:product-type-select-options>
+                </cache>
             </select>
         </div>
 
