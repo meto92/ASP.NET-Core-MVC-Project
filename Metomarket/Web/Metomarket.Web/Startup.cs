@@ -13,6 +13,7 @@ using Metomarket.Services.Messaging.SendGrid;
 using Metomarket.Web.Hubs;
 using Metomarket.Web.Infrastructure.ComponentViewModels.ProductTypes;
 using Metomarket.Web.Infrastructure.Filters;
+using Metomarket.Web.MLModels;
 using Metomarket.Web.ViewModels;
 
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ML;
 
 namespace Metomarket.Web
 {
@@ -72,6 +74,8 @@ namespace Metomarket.Web
                 });
 
             services.AddSignalR();
+            services.AddPredictionEnginePool<ModelInput, ModelOutput>()
+                .FromFile("MLModels/MLModel.zip");
 
             services
                 .AddMvc(options =>
@@ -173,6 +177,7 @@ namespace Metomarket.Web
             app.UseSignalR(routes =>
             {
                 routes.MapHub<DashboardHub>("/dashboard");
+                routes.MapHub<ProductCreateHub>("/products/create");
             });
 
             app.UseMvc(routes =>

@@ -160,6 +160,7 @@ form.form {
     resize: none;
     padding: 1em;
     overflow: hidden; }
+  form.form #suggest-price,
   form.form input[type=submit],
   form.form button[type=submit] {
     font-size: 1.2em;
@@ -186,6 +187,7 @@ form.form {
     background: linear-gradient(90deg, #333, #00f, #333); }
   to {
     background: linear-gradient(90deg, #00f, #333, #00f); } }
+    form.form #suggest-price:hover,
     form.form input[type=submit]:hover,
     form.form button[type=submit]:hover {
       -webkit-animation: btn-bg 1s linear infinite;

@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.ML" Version="0.15.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.48" />
@@ -41,4 +42,11 @@
     <ProjectReference Include="..\Metomarket.Web.Infrastructure\Metomarket.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Metomarket.Web.ViewModels\Metomarket.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MLModels\MLModel.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

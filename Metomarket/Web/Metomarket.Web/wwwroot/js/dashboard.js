@@ -62,8 +62,6 @@ $(() => {
 
     connection.start()
         .catch((err) => {
-            location.reload();
-
-            //return console.error(err.toString());
+            console.error(err.toString());
     });
 })()

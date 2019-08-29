@@ -26,6 +26,10 @@
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
+        <div class="text-center">
+            <a class="my-2" id="suggest-price">Suggest price</a>
+        </div>
+
         <div class="form-group">
             <label asp-for="ImageUrl"></label>
             <label class="input-wrapper">
@@ -55,3 +59,8 @@
         </div>
     </form>
 </section>
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/products-create.js"></script>
+}
