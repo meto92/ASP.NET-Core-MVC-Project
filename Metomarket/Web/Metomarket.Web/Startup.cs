@@ -177,7 +177,6 @@ namespace Metomarket.Web
             app.UseSignalR(routes =>
             {
                 routes.MapHub<DashboardHub>("/dashboard");
-                routes.MapHub<ProductCreateHub>("/products/create");
             });
 
             app.UseMvc(routes =>

@@ -3,16 +3,10 @@ $(() => {
     const $name = $("input[name=Name]");
     const $typeId = $("[name=TypeId]");
     const $suggestPrice = $("#suggest-price");
-
-    const url = "/products/create";
-    const getPriceMethodName = "GetPrice";
-    const setPriceMethodName = "SetPrice";
+    
+    const url = "/api/suggestPrice";
     const bootstrapDisplayInlineBlockClass = "d-inline-block";
 
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl(url)
-        .build();
-   
     const suggestPrice = () => {
         const name = $name.val().trim();
 
@@ -20,7 +14,22 @@ $(() => {
             return;
         }
 
-        connection.invoke(getPriceMethodName, name);
+        const obj = {
+            name
+        };
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: obj,
+            contentType: "application/json; charset=utf-8",
+            success: (price) => {
+                $price.val(+price.toFixed(0));
+            },
+            error: (err) => {
+                console.error(err);
+            }
+        })
     };
 
     const showHideSuggestPriceButton = () => {
@@ -43,13 +52,4 @@ $(() => {
     $typeId.change(showHideSuggestPriceButton);
 
     showHideSuggestPriceButton();
-
-    connection.on(setPriceMethodName, (price) => {
-        $price.val(+price.toFixed(0));
-    });
-
-    connection.start()
-        .catch((err) => {
-            console.error(err.toString());
-    });
 })()
