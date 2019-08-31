@@ -20,10 +20,13 @@ namespace Metomarket.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
 
+        [PersonalDataAttribute]
         public string FirstName { get; set; }
 
+        [PersonalDataAttribute]
         public string LastName { get; set; }
 
+        [PersonalDataAttribute]
         public string Address { get; set; }
 
         // Audit info

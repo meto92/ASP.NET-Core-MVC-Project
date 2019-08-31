@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
+using Metomarket.Common;
 using Metomarket.Data.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -59,6 +60,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
+
             if (user == null)
             {
                 return this.NotFound(string.Format(
@@ -78,7 +80,19 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var result = await this.userManager.DeleteAsync(user);
+            if (user.Email == GlobalConstants.RootAdministratorEmail
+                && user.UserName == GlobalConstants.RootAdministratorUsername)
+            {
+                return this.Page();
+            }
+
+            user.FirstName = null;
+            user.LastName = null;
+            user.PhoneNumber = null;
+            user.Address = string.Empty;
+            user.IsDeleted = true;
+
+            var result = await this.userManager.UpdateAsync(user);
             var userId = await this.userManager.GetUserIdAsync(user);
 
             if (!result.Succeeded)

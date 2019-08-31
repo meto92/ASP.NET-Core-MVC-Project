@@ -12,6 +12,7 @@ namespace Metomarket.Services.Data
     public class ShoppingCartService : IShoppingCartService
     {
         private const string OrderNotFoundMessage = "Order not found.";
+        private const string CustomerShoppingCartNotFound = "User with ID '{0}' does not have a shopping cart.";
 
         private readonly IRepository<ShoppingCart> shoppingCartRepository;
         private readonly IRepository<Order> orderRepository;
@@ -30,12 +31,12 @@ namespace Metomarket.Services.Data
         public async Task<bool> AddOrderAsync(string userId, string orderId)
         {
             ShoppingCart shoppingCart = this.shoppingCartRepository.All()
-                .Where(sc => sc.CustomerId == userId)
+                .Where(cart => cart.CustomerId == userId)
                 .FirstOrDefault();
 
             if (shoppingCart == null)
             {
-                throw new ServiceException();
+                this.ThrowShoppingCartNotFound(userId);
             }
 
             Order order = this.orderRepository.All()
@@ -57,13 +58,13 @@ namespace Metomarket.Services.Data
         public async Task<bool> EmptyCartAsync(string userId, bool restoreProductQuantities = false)
         {
             ShoppingCart shoppingCart = this.shoppingCartRepository.All()
-                .Include(sc => sc.Orders)
-                .Where(sc => sc.CustomerId == userId)
+                .Include(cart => cart.Orders)
+                .Where(cart => cart.CustomerId == userId)
                 .FirstOrDefault();
 
             if (shoppingCart == null)
             {
-                throw new ServiceException();
+                this.ThrowShoppingCartNotFound(userId);
             }
 
             if (restoreProductQuantities)
@@ -91,10 +92,17 @@ namespace Metomarket.Services.Data
 
             if (model == null)
             {
-                throw new ServiceException();
+                this.ThrowShoppingCartNotFound(userId);
             }
 
             return model;
+        }
+
+        private void ThrowShoppingCartNotFound(string userId)
+        {
+            throw new ServiceException(string.Format(
+                    CustomerShoppingCartNotFound,
+                    userId));
         }
     }
 }
