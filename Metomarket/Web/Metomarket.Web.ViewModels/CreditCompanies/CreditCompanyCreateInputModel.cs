@@ -12,6 +12,7 @@ namespace Metomarket.Web.ViewModels.CreditCompanies
         private const int NameMaxLength = GlobalConstants.CreditCompanyNameMaxLength;
         private const int YearAfter = 1899;
         private const string ActiveSinceDisplayName = "Active Since";
+        private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
         public CreditCompanyCreateInputModel()
         {
@@ -19,7 +20,7 @@ namespace Metomarket.Web.ViewModels.CreditCompanies
         }
 
         [Required]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+        [StringLength(NameMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = NameMinLength)]
         public string Name { get; set; }
 
         [IsAfterYear(YearAfter)]

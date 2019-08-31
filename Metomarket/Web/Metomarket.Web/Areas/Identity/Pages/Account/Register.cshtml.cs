@@ -125,9 +125,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             private const int PasswordMaxLength = GlobalConstants.PasswordMaxLength;
             private const string ConfirmPasswordDisplayName = "Confirm password";
             private const string PasswordsDoNotMatchMessage = "The password and confirmation password do not match.";
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
             [Required]
-            [StringLength(UsernameMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = UsernameMinLength)]
+            [StringLength(UsernameMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = UsernameMinLength)]
             public string Username { get; set; }
 
             [Required]
@@ -135,7 +136,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(AddressMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = AddressMinLength)]
+            [StringLength(AddressMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = AddressMinLength)]
             public string Address { get; set; }
 
             [StringLength(FirstNameMaxLength)]
@@ -150,7 +151,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             public string PhoneNumber { get; set; }
 
             [Required]
-            [StringLength(PasswordMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = PasswordMinLength)]
+            [StringLength(PasswordMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = PasswordMinLength)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 

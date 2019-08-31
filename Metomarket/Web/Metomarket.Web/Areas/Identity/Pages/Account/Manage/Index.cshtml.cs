@@ -195,9 +195,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             private const int UsernameMinLength = GlobalConstants.UsernameMinLength;
             private const int UsernameMaxLength = GlobalConstants.UsernameMaxLength;
             private const string PhoneNumberDisplayName = "Phone number";
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
             [Required]
-            [StringLength(UsernameMaxLength, MinimumLength = UsernameMinLength)]
+            [StringLength(UsernameMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = UsernameMinLength)]
             public string Username { get; set; }
 
             [Phone]

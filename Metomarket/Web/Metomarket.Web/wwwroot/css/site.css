@@ -393,3 +393,14 @@ body {
   .search-wrapper ::placeholder {
     color: #ccc;
     font-style: italic; }
+
+aside i.fa-chevron-up,
+aside i.fa-chevron-down {
+  font-size: 1.25em;
+  transition: transform 0.3s ease-in-out; }
+
+aside i.fa-chevron-up:hover {
+  transform: translateY(-0.5rem) rotateZ(-360deg); }
+
+aside i.fa-chevron-down:hover {
+  transform: translateY(0.5rem) rotateZ(360deg); }

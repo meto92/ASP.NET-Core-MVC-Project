@@ -15,9 +15,10 @@ namespace Metomarket.Web.ViewModels.Products
         private const int ImageUrlMaxLength = GlobalConstants.ProductImageUrlMaxLength;
         private const string ImageUrlDisplayName = "Image URL";
         private const string TypeIdDisplayName = "Type";
+        private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
         [Required]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+        [StringLength(NameMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = NameMinLength)]
         public string Name { get; set; }
 
         [Range(typeof(decimal), PriceMinValue, PriceMaxValue)]

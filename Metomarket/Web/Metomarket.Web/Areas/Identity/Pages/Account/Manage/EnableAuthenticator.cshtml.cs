@@ -180,7 +180,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
             private const int CodeMinLength = 6;
             private const int CodeMaxLength = 7;
             private const string CodeDisplayName = "Verification Code";
-            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessageFormat;
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
             [Required]
             [StringLength(CodeMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = CodeMinLength)]

@@ -42,3 +42,23 @@
         font-style: italic;
     }
 }
+
+aside {
+    i.fa-chevron-up,
+    i.fa-chevron-down {
+        font-size: 1.25em;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    i.fa-chevron-up {
+        &:hover {
+            transform: translateY(-0.5rem) rotateZ(-360deg);
+        }
+    }
+
+    i.fa-chevron-down {
+        &:hover {
+            transform: translateY(0.5rem) rotateZ(360deg);
+        }
+    }
+}

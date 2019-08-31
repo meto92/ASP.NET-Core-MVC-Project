@@ -10,7 +10,7 @@ namespace Metomarket.Web.ViewModels.ProductTypes
     {
         private const int NameMinLength = GlobalConstants.ProductTypeNameMinLength;
         private const int NameMaxLength = GlobalConstants.ProductTypeNameMaxLength;
-        private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessageFormat;
+        private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
         [Required]
         public string Id { get; set; }

@@ -10,7 +10,7 @@
 
         public const string RootAdministratorAddress = "Earth";
 
-        public const string StringLengthErrorMessageFormat = "The {0} must be at least {2} and at max {1} characters long.";
+        public const string StringLengthErrorMessage = "The {0} must be at least {2} and at max {1} characters long.";
 
         public const int UsernameMinLength = 3;
 

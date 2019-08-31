@@ -17,11 +17,12 @@ namespace Metomarket.Web.ViewModels.Products
         private const string InStockDisplayName = "Current Quantity";
         private const int InStockMaxValue = 1000;
         private const string QuantityToAddDisplayName = "Quantity to Add";
+        private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
         public string Id { get; set; }
 
         [Required]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+        [StringLength(NameMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = NameMinLength)]
         public string Name { get; set; }
 
         public string TypeName { get; set; }

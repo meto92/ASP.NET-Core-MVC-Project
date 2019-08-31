@@ -108,9 +108,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             private const int TwoFactorCodeMaxLength = 7;
             private const string TwoFactorCodeDisplayName = "Authenticator code";
             private const string RememberMachineDisplayName = "Remember this machine";
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
             [Required]
-            [StringLength(TwoFactorCodeMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = TwoFactorCodeMinLength)]
+            [StringLength(TwoFactorCodeMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = TwoFactorCodeMinLength)]
             [DataType(DataType.Text)]
             [Display(Name = TwoFactorCodeDisplayName)]
             public string TwoFactorCode { get; set; }

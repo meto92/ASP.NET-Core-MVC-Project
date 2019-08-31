@@ -94,7 +94,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account.Manage
         {
             private const int PasswordMinLength = GlobalConstants.PasswordMinLength;
             private const int PasswordMaxLength = GlobalConstants.PasswordMaxLength;
-            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessageFormat;
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
             private const string NewPasswordDisplayName = "New password";
             private const string ConfirmPasswordDisplayName = "Confirm new password";
             private const string ConfirmPasswordErrorMEssage = "The new password and confirmation password do not match.";

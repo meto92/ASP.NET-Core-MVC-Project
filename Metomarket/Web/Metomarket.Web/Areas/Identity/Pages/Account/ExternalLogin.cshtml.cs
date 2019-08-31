@@ -197,9 +197,10 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             private const string FirstNameDisplayName = "First name";
             private const int LastNameMaxLength = GlobalConstants.UserLastNameMaxLength;
             private const string LastNameDisplayName = "Last name";
+            private const string StringLengthErrorMessage = GlobalConstants.StringLengthErrorMessage;
 
             [Required]
-            [StringLength(UsernameMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = UsernameMinLength)]
+            [StringLength(UsernameMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = UsernameMinLength)]
             public string Username { get; set; }
 
             [Required]
@@ -207,7 +208,7 @@ namespace Metomarket.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required]
-            [StringLength(AddressMaxLength, ErrorMessage = GlobalConstants.StringLengthErrorMessageFormat, MinimumLength = AddressMinLength)]
+            [StringLength(AddressMaxLength, ErrorMessage = StringLengthErrorMessage, MinimumLength = AddressMinLength)]
             public string Address { get; set; }
 
             [StringLength(FirstNameMaxLength)]
