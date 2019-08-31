@@ -77,6 +77,8 @@ namespace Metomarket.Web
             services.AddPredictionEnginePool<ModelInput, ModelOutput>()
                 .FromFile("MLModels/MLModel.zip");
 
+            services.AddMemoryCache();
+
             services
                 .AddMvc(options =>
                 {
