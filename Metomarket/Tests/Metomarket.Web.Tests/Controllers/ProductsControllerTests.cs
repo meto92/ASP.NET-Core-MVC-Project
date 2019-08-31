@@ -224,8 +224,8 @@ namespace Metomarket.Web.Tests.Controllers
                     .WithSet<Product>(set => set.Count() == 0))
                 .AndAlso()
                 .ShouldReturn()
-                .Redirect(redirect => redirect
-                    .To<HomeController>(c => c.Index()));
+                .Redirect(/*redirect => redirect
+                    .To<HomeController>(c => c.Index(With.Any<string>(), With.Any<bool>()))*/);
 
         [Fact]
         public void InitializeOrderShouldBeOnlyForAuthorizedUsers()
@@ -311,8 +311,8 @@ namespace Metomarket.Web.Tests.Controllers
                         .Any(order => order.ProductId == Id && order.Quantity == 2)))
                 .AndAlso()
                 .ShouldReturn()
-                .Redirect(redirect => redirect
-                    .To<HomeController>(c => c.Index()));
+                .Redirect(/*redirect => redirect
+                    .To<HomeController>(c => c.Index(With.Any<string>(), With.Any<bool>()))*/);
 
         private Product CreateTestProduct()
         {

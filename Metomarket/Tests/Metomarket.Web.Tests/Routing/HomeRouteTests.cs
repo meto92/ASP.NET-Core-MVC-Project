@@ -13,13 +13,13 @@ namespace Metomarket.Web.Tests.Routing
             => MyMvc
                 .Routing()
                 .ShouldMap("/Home/Index")
-                .To<HomeController>(c => c.Index());
+                .To<HomeController>(c => c.Index(With.Any<string>(), With.Any<bool>()));
 
         [Fact]
         public void SlashShouldBeRoutedCorrectly()
             => MyMvc
                 .Routing()
                 .ShouldMap("/")
-                .To<HomeController>(c => c.Index());
+                .To<HomeController>(c => c.Index(With.Any<string>(), With.Any<bool>()));
     }
 }

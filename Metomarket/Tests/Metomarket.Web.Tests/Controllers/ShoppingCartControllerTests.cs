@@ -147,8 +147,8 @@ namespace Metomarket.Web.Tests.Controllers
                         .Single(c => c.CustomerId == UserId)))
                 .AndAlso()
                 .ShouldReturn()
-                .Redirect(redirect => redirect
-                    .To<HomeController>(c => c.Index()));
+                .Redirect(/*redirect => redirect
+                    .To<HomeController>(c => c.Index(With.Any<string>(), With.Any<bool>()))*/);
 
         [Fact]
         public void EmptyCartShouldRedirect()

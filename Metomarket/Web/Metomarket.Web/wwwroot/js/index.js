@@ -21,12 +21,12 @@ $(() => {
             .css("display", "none");
     };
 
-    $("aside a").click(e => {
+    $("aside nav.types a").click(e => {
         const $clickedA = $(e.target);
 
         type = $clickedA.attr(dataAttrName);
 
-        $(`aside a.${activeClassName}`).removeClass(activeClassName);
+        $(`aside nav.types a.${activeClassName}`).removeClass(activeClassName);
         $clickedA.addClass(activeClassName);
 
         filterProducts();

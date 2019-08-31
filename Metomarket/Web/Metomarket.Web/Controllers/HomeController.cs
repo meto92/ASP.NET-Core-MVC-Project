@@ -1,4 +1,5 @@
-﻿using Metomarket.Services.Data;
+﻿using Metomarket.Common.Extensions;
+using Metomarket.Services.Data;
 using Metomarket.Web.ViewModels.Products;
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,15 @@ namespace Metomarket.Web.Controllers
             this.productService = productService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(
+            string orderBy = nameof(ProductHomeViewModel.Type),
+            bool ascending = true)
         {
             ProductsListViewModel model = new ProductsListViewModel
             {
-                Products = this.productService.All<ProductHomeViewModel>(),
+                Products = this.productService
+                    .All<ProductHomeViewModel>()
+                    .Order(orderBy, ascending),
             };
 
             return this.View(model);

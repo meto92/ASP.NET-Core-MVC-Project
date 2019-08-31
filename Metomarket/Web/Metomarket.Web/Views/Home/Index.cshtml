@@ -1,5 +1,6 @@
-﻿@model Metomarket.Web.ViewModels.Products.ProductsListViewModel
-@using Metomarket.Common
+﻿@using Metomarket.Common
+@using Metomarket.Web.ViewModels.Products
+@model ProductsListViewModel
 
 @{
     this.ViewData["Title"] = "Home Page";
@@ -18,7 +19,7 @@
                 <i class="fas fa-search"></i>
             </label>
 
-            <nav class="bg-dark text-white rounded mb-3">
+            <nav class="bg-dark text-white rounded mb-4 types">
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" data_name="">All</a>
@@ -26,6 +27,33 @@
                     <cache expires-after="TimeSpan.FromMinutes(GlobalConstants.CacheExpirationMinutes)">
                         <vc:product-type-links></vc:product-type-links>
                     </cache>
+                </ul>
+            </nav>
+
+            @{
+                string idPropName = nameof(ProductHomeViewModel.Id);
+                string imageUrlPropName = nameof(ProductHomeViewModel.ImageUrl);
+                var propertiesForOrdering = typeof(ProductHomeViewModel)
+                    .GetProperties()
+                    .Where(propInfo => !new[] { idPropName, imageUrlPropName }
+                        .Contains(propInfo.Name));
+            }
+            
+            <h4 class="text-center">Order by</h4>
+
+            <nav class="bg-dark text-white rounded">
+                <ul class="nav nav-pills flex-column">
+                    @foreach (var propertyInfo in propertiesForOrdering)
+                    {
+                        <li class="nav-item px-3 py-2 d-flex justify-content-between">
+                            <span>@propertyInfo.Name</span>
+                            <span>
+                                <a asp-area="" asp-route-orderBy="@propertyInfo.Name" class="mx-2" title="Ascending"><i class="fas fa-chevron-up"></i></a>
+
+                                <a asp-area="" asp-route-orderBy="@propertyInfo.Name" asp-route-ascending="false" title="Descending"><i class="fas fa-chevron-down"></i></a>
+                            </span>    
+                        </li>
+                    }
                 </ul>
             </nav>
         </aside>
@@ -40,7 +68,7 @@
                         <img class="card-img-top" src="@product.ImageUrl" alt="@product.Name image">
                         <div class="card-body d-flex align-items-center flex-column">
                             <h4 class="product-name card-title text-center">@product.Name</h4>
-                            <h5 class="product-type font-italic">@product.TypeName</h5>
+                            <h5 class="product-type font-italic">@product.Type</h5>
                             <p class="card-text">Description</p>
                             <p>$@($"{product.Price:f2}")</p>
                             <a asp-area="Market" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary mt-auto">Details</a>
